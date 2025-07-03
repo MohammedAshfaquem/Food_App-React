@@ -1,0 +1,142 @@
+{
+  "users": [
+    {
+      "id": "205c",
+      "name": "Test User",
+      "email": "test@gmail.com",
+      "password": "test123",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "wishlist": [],
+      "orders": []
+    },
+    {
+      "id": "afcc",
+      "name": "Adnan",
+      "email": "mohammedashfaquemvkpadi@gmail.com",
+      "password": "fjfm ",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "orders": [],
+      "wishlist": []
+    },
+    {
+      "id": "dfaf",
+      "name": "Mealio",
+      "email": "asd@gmail.com",
+      "password": "ugbjd",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "orders": [],
+      "wishlist": []
+    },
+    {
+      "id": "d539",
+      "name": "Adnan",
+      "email": "Anas23@gmail.com",
+      "password": "fhionkd",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "orders": [],
+      "wishlist": []
+    },
+    {
+      "id": "ef1d",
+      "name": "Mealio",
+      "email": "tesdbjdmt@gmail.com",
+      "password": "hjn f",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "orders": [],
+      "wishlist": []
+    }
+  ],
+"products": [
+  {
+    "id": 1,
+    "title": "Burger",
+    "count": "5 PRODUCTS",
+    "price": 199,
+    "rating": 4.2,
+    "inStock": true,
+    "defaultImg": "/Burger.png",
+    "hoverImg": "/Burger.png"
+  },
+  {
+    "id": 2,
+    "title": "Pizza",
+    "count": "5 PRODUCTS",
+    "price": 249,
+    "rating": 4.8,
+    "inStock": true,
+    "defaultImg": "/pizza.png",
+    "hoverImg": "/pizza.png"
+  },
+  {
+    "id": 3,
+    "title": "Noodles",
+    "count": "5 PRODUCTS",
+    "price": 99,
+    "rating": 3.9,
+    "inStock": false,
+    "defaultImg": "/Noodles.png",
+    "hoverImg": "/Noodles.png"
+  },
+  {
+    "id": 4,
+    "title": "Fries",
+    "count": "5 PRODUCTS",
+    "price": 179,
+    "rating": 4.5,
+    "inStock": true,
+    "defaultImg": "/Fries.png",
+    "hoverImg": "/Fries.png"
+  },
+  {
+    "id": 5,
+    "title": "Ruti",
+    "count": "5 PRODUCTS",
+    "price": 199,
+    "rating": 4.1,
+    "inStock": true,
+    "defaultImg": "/beef-ruti.png",
+    "hoverImg": "/beef-ruti.png"
+  },
+  {
+    "id": 6,
+    "title": "Broast",
+    "count": "5 PRODUCTS",
+    "price": 199,
+    "rating": 4.0,
+    "inStock": false,
+    "defaultImg": "/broast.png",
+    "hoverImg": "/broast.png"
+  },
+  {
+    "id": 7,
+    "title": "Combo",
+    "count": "5 PRODUCTS",
+    "price": 199,
+    "rating": 4.3,
+    "inStock": true,
+    "defaultImg": "/combo.png",
+    "hoverImg": "/combo.png"
+  },
+  {
+    "id": 8,
+    "title": "Grilled Chicken",
+    "count": "5 PRODUCTS",
+    "price": 199,
+    "rating": 4.7,
+    "inStock": true,
+    "defaultImg": "/grilledchicken.png",
+    "hoverImg": "/grilledchicken.png"
+  }
+]
+
+}
