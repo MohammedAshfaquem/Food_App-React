@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import PrivateRoute from "./Components/PrivateRoute";
 import PopularItems from "./pages/PopularItems";
 import AllFoods from "./pages/AllFoods";
+import CartPage from "./pages/CartPage";
 
 function App() {
   return (
@@ -15,6 +16,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/register" element={<Register />} />
+          <Route path="/cart" element={<CartPage />} />
+
           <Route path="/login" element={<Login />} />
           <Route
             path="/"

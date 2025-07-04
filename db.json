@@ -7,7 +7,96 @@
       "password": "test123",
       "role": "user",
       "isBlock": false,
-      "cart": [],
+      "cart": [
+        {
+          "id": "3",
+          "title": "Noodles",
+          "count": "5 PRODUCTS",
+          "price": 99,
+          "rating": 3.9,
+          "inStock": false,
+          "defaultImg": "/Noodles.png",
+          "description": "Spicy stir-fried noodles with veggies and soy sauce.",
+          "quantity": 9
+        },
+        {
+          "id": "2",
+          "title": "Pizza",
+          "count": "5 PRODUCTS",
+          "price": 249,
+          "rating": 4.8,
+          "inStock": true,
+          "defaultImg": "/pizza.png",
+          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil.",
+          "quantity": 2
+        },
+        {
+          "id": "7",
+          "title": "Combo",
+          "count": "5 PRODUCTS",
+          "price": 199,
+          "rating": 4.3,
+          "inStock": true,
+          "defaultImg": "/combo.png",
+          "description": "Burger, fries, and a drink combo meal.",
+          "quantity": 2
+        },
+        {
+          "id": "1",
+          "title": "Burger",
+          "count": "5 PRODUCTS",
+          "price": 199,
+          "rating": 4.2,
+          "inStock": true,
+          "defaultImg": "/Burger.png",
+          "description": "Juicy grilled burger with melted cheese and lettuce.",
+          "quantity": 1
+        },
+        {
+          "id": "4",
+          "title": "Fries",
+          "count": "5 PRODUCTS",
+          "price": 179,
+          "rating": 4.5,
+          "inStock": true,
+          "defaultImg": "/Fries.png",
+          "description": "Crispy golden French fries with seasoning.",
+          "quantity": 1
+        },
+        {
+          "id": "5",
+          "title": "Ruti",
+          "count": "5 PRODUCTS",
+          "price": 199,
+          "rating": 4.1,
+          "inStock": true,
+          "defaultImg": "/beef-ruti.png",
+          "description": "Soft ruti with spicy beef curry, served hot.",
+          "quantity": 1
+        },
+        {
+          "id": "6",
+          "title": "Broast",
+          "count": "5 PRODUCTS",
+          "price": 199,
+          "rating": 4,
+          "inStock": false,
+          "defaultImg": "/broast.png",
+          "description": "Crispy fried broast chicken with flavorful coating.",
+          "quantity": 1
+        },
+        {
+          "id": "8",
+          "title": "Grilled Chicken",
+          "count": "5 PRODUCTS",
+          "price": 199,
+          "rating": 4.7,
+          "inStock": true,
+          "defaultImg": "/grilledchicken.png",
+          "description": "Tender grilled chicken breast with smoky flavor.",
+          "quantity": 1
+        }
+      ],
       "wishlist": [],
       "orders": []
     },
@@ -58,7 +147,7 @@
   ],
   "products": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Burger",
       "count": "5 PRODUCTS",
       "price": 199,
@@ -68,7 +157,7 @@
       "description": "Juicy grilled burger with melted cheese and lettuce."
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Pizza",
       "count": "5 PRODUCTS",
       "price": 249,
@@ -78,7 +167,7 @@
       "description": "Cheesy pepperoni pizza with fresh tomatoes and basil."
     },
     {
-      "id": 3,
+      "id": "3",
       "title": "Noodles",
       "count": "5 PRODUCTS",
       "price": 99,
@@ -88,7 +177,7 @@
       "description": "Spicy stir-fried noodles with veggies and soy sauce."
     },
     {
-      "id": 4,
+      "id": "4",
       "title": "Fries",
       "count": "5 PRODUCTS",
       "price": 179,
@@ -98,7 +187,7 @@
       "description": "Crispy golden French fries with seasoning."
     },
     {
-      "id": 5,
+      "id": "5",
       "title": "Ruti",
       "count": "5 PRODUCTS",
       "price": 199,
@@ -108,17 +197,17 @@
       "description": "Soft ruti with spicy beef curry, served hot."
     },
     {
-      "id": 6,
+      "id": "6",
       "title": "Broast",
       "count": "5 PRODUCTS",
       "price": 199,
-      "rating": 4.0,
+      "rating": 4,
       "inStock": false,
       "defaultImg": "/broast.png",
       "description": "Crispy fried broast chicken with flavorful coating."
     },
     {
-      "id": 7,
+      "id": "7",
       "title": "Combo",
       "count": "5 PRODUCTS",
       "price": 199,
@@ -128,7 +217,7 @@
       "description": "Burger, fries, and a drink combo meal."
     },
     {
-      "id": 8,
+      "id": "8",
       "title": "Grilled Chicken",
       "count": "5 PRODUCTS",
       "price": 199,
