@@ -24,7 +24,14 @@ function App() {
               </PrivateRoute>
             }
           />
-          <Route path="/all-foods" element={<AllFoods />} />
+          <Route
+            path="/all-foods"
+            element={
+              <PrivateRoute>
+                <AllFoods />
+              </PrivateRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
       <ToastContainer

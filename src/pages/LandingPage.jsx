@@ -18,7 +18,7 @@ const LandingPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <div className="flex flex-1 items-center justify-between px-20 py-10  ml-30" >
+      <div className="flex flex-1 items-center justify-between px-20 py-10  ml-30 " >
         {/* Left */}
         <div className="max-w-xl">
           <span style={{color:"rgba(121, 42, 231, 0.91) ", fontSize:"90px", fontWeight:"bold"}}>Welcome <span style={{color:"black"}}>To</span></span>

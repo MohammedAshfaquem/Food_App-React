@@ -4,8 +4,9 @@ import FoodCard from "../Components/FoodCard";
 
 const AllFoods = () => {
   const [foods, setFoods] = useState([]);
-  const [filter, setFilter] = useState(null); // 'price' | 'rating' | 'stock' | null
   const [search, setSearch] = useState("");
+
+  const [filter, setFilter] = useState(null); // 'price' | 'rating' | 'stock' | null
 
   useEffect(() => {
     axios
@@ -19,7 +20,7 @@ const AllFoods = () => {
 
     // Apply search
     if (search.trim()) {
-      filtered = filtered.filter(item =>
+      filtered = filtered.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       );
     }
@@ -30,7 +31,7 @@ const AllFoods = () => {
     } else if (filter === "rating") {
       filtered.sort((a, b) => b.rating - a.rating);
     } else if (filter === "stock") {
-      filtered = filtered.filter(item => item.inStock);
+      filtered = filtered.filter((item) => item.inStock);
     }
 
     return filtered;
@@ -95,7 +96,7 @@ const AllFoods = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {filteredFoods.length > 0 ? (
             filteredFoods.map((item) => (
-              <FoodCard key={item.id} item={item} />
+              <FoodCard item={item} viewMode="detailed" />
             ))
           ) : (
             <p className="text-gray-500">No food items found.</p>
