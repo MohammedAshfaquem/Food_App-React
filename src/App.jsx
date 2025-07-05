@@ -9,6 +9,8 @@ import PrivateRoute from "./Components/PrivateRoute";
 import PopularItems from "./pages/PopularItems";
 import AllFoods from "./pages/AllFoods";
 import CartPage from "./pages/CartPage";
+import WishlistPage from "./pages/WishlistPage";
+import OrdersPage from "./pages/Orders";
 
 function App() {
   return (
@@ -17,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
 
           <Route path="/login" element={<Login />} />
           <Route
@@ -35,6 +38,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path="/orders" element={<OrdersPage />} />
         </Routes>
       </BrowserRouter>
       <ToastContainer

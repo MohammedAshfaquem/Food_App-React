@@ -3,6 +3,7 @@ import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
 import { useEffect, useState } from "react";
+import CheckoutFooter from "../Components/CheckOut";
 
 const CartPage = () => {
   const { user } = useAuth();
@@ -76,10 +77,7 @@ const CartPage = () => {
                   <FaPlus />
                 </button>
               </div>
-              <button
-                className="text-red-500"
-                onClick={() => remove(item.id)}
-              >
+              <button className="text-red-500" onClick={() => remove(item.id)}>
                 <FaTrash />
               </button>
             </div>
@@ -99,8 +97,19 @@ const CartPage = () => {
             </div>
           ))}
           <hr className="my-4 border-white" />
-          <div className="text-right font-bold text-lg">
-            Total: ₹{total.toFixed(2)}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignContent: "center",
+              textAlign: "center",
+            }}
+          >
+            {" "}
+            <CheckoutFooter></CheckoutFooter>
+            <div className="mt-2 font-bold text-lg">
+              Total: ₹{total.toFixed(2)}
+            </div>
           </div>
         </div>
       </div>

@@ -16,7 +16,7 @@ const PopularItems = () => {
   return (
     <section className="bg-[#f7f5f1] py-16 px-8">
       <div className="max-w-screen-xl mx-auto">
-        <p className="text-red-600 font-semibold uppercase mb-2">
+        <p className="text-purple-600 font-semibold uppercase mb-2">
           Crispy, Every Bite Taste
         </p>
         <h2 className="text-5xl font-extrabold text-black mb-10">

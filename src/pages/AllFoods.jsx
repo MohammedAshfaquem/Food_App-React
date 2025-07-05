@@ -40,7 +40,7 @@ const AllFoods = () => {
   return (
     <>
       <Navbar />
-      <section className="bg-white min-h-screen px-8 py-10">
+      <section className="bg-[#f7f5f1] min-h-screen px-8 py-10">
         <div className="max-w-screen-xl mx-auto">
           <h1 className="text-4xl font-bold mb-6">All Foods</h1>
 
