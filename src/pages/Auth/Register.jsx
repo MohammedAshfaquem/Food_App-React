@@ -42,7 +42,6 @@ const Register = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
-      {/* Left - Image (hidden on small screens) */}
       <div className="hidden md:flex w-1/2 bg-purple-200 items-center justify-center">
         <img src="/Reg.png" alt="welcome" className="w-[500px] max-w-full" />
       </div>

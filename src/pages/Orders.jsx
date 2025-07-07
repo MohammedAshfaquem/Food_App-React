@@ -55,13 +55,13 @@ const OrdersPage = () => {
     } else if (status.toLowerCase() === "processing") {
       return `${base} bg-blue-100 text-blue-700`;
     }
-    return `${base} bg-gray-100 text-gray-700`; // default fallback
+    return `${base} bg-gray-100 text-gray-700`;
   };
 
   return (
     <>
       <Navbar />
-      <div className="max-w-5xl mx-auto px-6 py-10 min-h-screen ">
+      <div className="max-w-5xl mx-auto px-6 py-10 min-h-screen">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold">Your Orders</h1>
           <button
@@ -94,7 +94,14 @@ const OrdersPage = () => {
                   Quantity: {item.quantity || 1}
                 </p>
 
-                {/* Order Date and Time */}
+                {item.address && (
+                  <div className="mt-3 text-sm text-gray-600">
+                    <p>
+                      <strong>📍 Address:</strong> {item.address}
+                    </p>
+                  </div>
+                )}
+
                 {item.orderedAt && (
                   <div className="mt-3 text-sm text-gray-600 space-y-1">
                     <p>
@@ -106,7 +113,6 @@ const OrdersPage = () => {
                   </div>
                 )}
 
-                {/* Status */}
                 {item.status && (
                   <div className="mt-4">
                     <span className={getStatusBadge(item.status)}>

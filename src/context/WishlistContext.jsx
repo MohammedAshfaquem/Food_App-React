@@ -26,6 +26,10 @@ export const WishlistProvider = ({ children }) => {
   }, [user]);
 
   const addToWishlist = async (item) => {
+    if (!user) {
+      toast.info("Please log in to use wishlist.");
+      return navigate("/login");
+    }
     try {
       const updated = [...wishlist, item];
       await API.patch(`/users/${user.id}`, { wishlist: updated });
@@ -53,7 +57,9 @@ export const WishlistProvider = ({ children }) => {
   };
 
   return (
-    <WishlistContext.Provider value={{ wishlist, addToWishlist, removeFromWishlist, moveToCart }}>
+    <WishlistContext.Provider
+      value={{ wishlist, addToWishlist, removeFromWishlist, moveToCart }}
+    >
       {children}
     </WishlistContext.Provider>
   );

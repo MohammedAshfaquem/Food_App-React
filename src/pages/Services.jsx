@@ -3,7 +3,7 @@ import React from "react";
 const services = [
   {
     title: "Best Quality Food",
-    img: "BurgerIcon.png", // Replace with your public folder path
+    img: "BurgerIcon.png",
     desc: "Excellence projecting is devonshire dispatched remarkably on estimating. Side in so life past.",
   },
   {

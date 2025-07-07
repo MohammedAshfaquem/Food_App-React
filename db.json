@@ -7,21 +7,38 @@
       "password": "test123",
       "role": "user",
       "isBlock": false,
-      "cart": [
-        {
-          "id": "2",
-          "title": "Pizza",
-          "count": "5 PRODUCTS",
-          "price": 299,
-          "rating": 4.6,
-          "inStock": false,
-          "defaultImg": "/pizza.png",
-          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil.",
-          "quantity": 2
-        }
-      ],
+      "cart": [],
       "wishlist": [],
-      "orders": []
+      "orders": [
+        {
+          "id": "6",
+          "title": "Broast",
+          "count": "5 PRODUCTS",
+          "price": 179,
+          "rating": 4.4,
+          "inStock": false,
+          "defaultImg": "/broast.png",
+          "description": "Crispy fried broast chicken with flavorful coating.",
+          "quantity": 5,
+          "orderedAt": "2025-07-07T15:57:50.105Z",
+          "address": "maliyekkale H mampuram",
+          "status": "Pending"
+        },
+        {
+          "id": "10",
+          "title": "Barbecue Chicken",
+          "count": "5 PRODUCTS",
+          "price": 239,
+          "rating": 4.4,
+          "inStock": true,
+          "defaultImg": "/Barbeque.png",
+          "description": "Smoky barbecue chicken with tangy sauce.",
+          "quantity": 3,
+          "orderedAt": "2025-07-07T16:19:14.230Z",
+          "address": "Chicken H Near",
+          "status": "Pending"
+        }
+      ]
     },
     {
       "id": "afcc",

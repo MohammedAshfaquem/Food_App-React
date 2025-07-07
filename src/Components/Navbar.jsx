@@ -8,24 +8,20 @@ import { useWishlist } from "../context/Wishlistcontext";
 const Navbar = () => {
   const { cart } = useCart();
   const { wishlist } = useWishlist();
-  const { user, logout } = useAuth(); // 👈 make sure logout is available
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
-
-  const [isOpen, setIsOpen] = useState(false); // 📦 Drawer toggle
-  const [showUserMenu, setShowUserMenu] = useState(false); // 👤 User dropdown
-
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropDown, setdropDown] = useState(false);
   const cartCount = cart.length;
   const wishlistCount = wishlist.length;
 
   const handleLogout = () => {
-    logout(); // From AuthContext
-    navigate("/"); // Redirect to home or login
+    logout();
   };
 
   return (
-    <nav className="bg-purple-400 bg-opacity-50 text-white font-bold">
+    <nav className="bg-purple-400  text-white font-bold">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between ml-20">
-        {/* Logo */}
         <div
           className="text-lg font-semibold cursor-pointer"
           onClick={() => navigate("/")}
@@ -33,37 +29,34 @@ const Navbar = () => {
           FoodRush
         </div>
 
-        {/* Desktop Menu */}
         <ul className="hidden md:flex gap-8 text-sm font-medium">
           <li
-            className="cursor-pointer hover:scale-105"
+            className="cursor-pointer hover:scale-105 text-[16px]"
             onClick={() => navigate("/")}
           >
             Home
           </li>
           <li
-            className="cursor-pointer hover:scale-105"
+            className="cursor-pointer hover:scale-105 text-[16px]"
             onClick={() => navigate("/#popularfoods")}
           >
             Popular
           </li>
           <li
-            className="cursor-pointer hover:scale-105"
+            className="cursor-pointer hover:scale-105 text-[16px]"
             onClick={() => navigate("/#services")}
           >
             Services
           </li>
           <li
-            className="cursor-pointer hover:scale-105"
+            className="cursor-pointer hover:scale-105 text-[16px]"
             onClick={() => navigate("/orders")}
           >
             Orders
           </li>
         </ul>
 
-        {/* Right Icons */}
         <div className="flex items-center gap-4 relative text-black">
-          {/* Wishlist */}
           <div
             className="relative cursor-pointer"
             onClick={() => navigate("/wishlist")}
@@ -76,7 +69,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Cart */}
           <div
             className="relative cursor-pointer"
             onClick={() => navigate("/cart")}
@@ -89,13 +81,12 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* User Dropdown */}
           <div className="relative">
             <User
               className="cursor-pointer hover:text-blue-500"
-              onClick={() => setShowUserMenu(!showUserMenu)}
+              onClick={() => setdropDown(!dropDown)}
             />
-            {showUserMenu && user && (
+            {dropDown && user && (
               <div className="absolute right-0 mt-2 w-60 bg-white text-black rounded shadow-md z-50">
                 <div className="px-4 py-2 border-b font-semibold text-purple-700">
                   {user.name}
@@ -112,8 +103,6 @@ const Navbar = () => {
               </div>
             )}
           </div>
-
-          {/* Mobile Hamburger Icon */}
           <div className="md:hidden">
             <Menu
               className="cursor-pointer"
@@ -123,7 +112,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
       {isOpen && (
         <div className="md:hidden bg-white text-black px-4 py-4 space-y-3 shadow">
           <div

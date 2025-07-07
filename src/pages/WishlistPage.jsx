@@ -5,7 +5,7 @@ import { useCart } from "../context/CartContext";
 import Empty from "../Components/Empty";
 
 const WishlistPage = () => {
-  const wishlist = useWishlist();
+  const {moveToCart,wishlist,removeFromWishlist} = useWishlist();
   const cart = useCart();
 
   return (
@@ -14,16 +14,16 @@ const WishlistPage = () => {
       <section className="p-6 sm:p-10 min-h-screen bg-[#f7f5f1] ">
         <h1 className="text-3xl font-bold mb-6">My Wishlist</h1>
 
-        {wishlist.wishlist.length === 0 ? (
+        {wishlist.length === 0 ? (
           <Empty message="Your wishlist is empty." />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {wishlist.wishlist.map((item) => (
+            {wishlist.map((item) => (
               <div
                 key={item.id}
                 className="p-4 rounded-lg shadow-md text-center text-white bg-cover bg-center"
                 style={{
-                  backgroundImage: "url('Hover.jpg')", // ⬅️ Replace this with your desired background
+                  backgroundImage: "url('Hover.jpg')",
                 }}
               >
                 <img
@@ -35,13 +35,13 @@ const WishlistPage = () => {
                 <p className="text-sm mb-2 text-black">₹{item.price}</p>
                 <div className="flex justify-center gap-3 mt-2">
                   <button
-                    onClick={() => wishlist.moveToCart(item, cart)}
+                    onClick={() =>moveToCart(item, cart)}
                     className="bg-purple-700 text-white px-4 py-1 rounded-full flex items-center gap-2"
                   >
                     <FaShoppingCart /> Add to Cart
                   </button>
                   <button
-                    onClick={() => wishlist.removeFromWishlist(item.id)}
+                    onClick={() => removeFromWishlist(item.id)}
                     className="text-red-500 hover:text-red-500"
                   >
                     <FaTrash />

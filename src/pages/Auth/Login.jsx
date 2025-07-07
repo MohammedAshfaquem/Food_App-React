@@ -27,7 +27,6 @@ const Login = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
-      {/* Left side - Image & Text (only on md and above) */}
       <div className="hidden md:flex w-1/2 bg-[#f4f7ff] flex-col justify-center items-center p-10">
         <h1 className="text-3xl font-bold mb-2 text-center">Sign In to Recharge Direct</h1>
         <p className="text-gray-600 mb-4 text-center">
@@ -42,7 +41,6 @@ const Login = () => {
         <img src="/Intro.png" alt="Login visual" className="max-w-[300px] mt-4" />
       </div>
 
-      {/* Right side - Login Form */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-white px-6 py-10">
         <form
           onSubmit={handleSubmit}
@@ -79,7 +77,6 @@ const Login = () => {
             Sign In
           </button>
 
-          {/* Register Link for mobile only */}
           <p className="text-center text-sm mt-4 md:hidden">
             Don’t have an account?{" "}
             <span

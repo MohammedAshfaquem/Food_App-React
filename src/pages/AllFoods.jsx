@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import FoodCard from "../Components/FoodCard";
 import Navbar from "../Components/Navbar";
+import API from "../services/api";
 
 const AllFoods = () => {
-  const [foods, setFoods] = useState([]); // All foods fetched from API
-  const [search, setSearch] = useState(""); // Search query
-  const [filter, setFilter] = useState(null); // Filter state (price, rating, stock)
+  const [foods, setFoods] = useState([]); 
+  const [search, setSearch] = useState(""); 
+  const [filter, setFilter] = useState(null); 
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/products") // Fetching data from API
+    API
+      .get("/products")
       .then((res) => setFoods(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  // Filtering and sorting logic directly in the render
   const getFilteredFoods = () => {
-    let result = foods.slice(); // Create a fresh copy of the foods array
+    let result = foods.slice(); 
 
-    // Search filtering
     if (search.trim()) {
       result = result.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Sorting
     if (filter === "price") {
       result = result.sort((a, b) => a.price - b.price);
     } else if (filter === "rating") {
@@ -39,11 +36,11 @@ const AllFoods = () => {
   };
 
   const handleFilterReset = () => {
-    setFilter(null); // Reset filter to "No Filter"
-    setSearch(""); // Optional: Clear search as well
+    setFilter(null);
+    setSearch("");
   };
 
-  const filteredFoods = getFilteredFoods(); // Directly call the function to get the filtered foods
+  const filteredFoods = getFilteredFoods(); 
 
   return (
     <>
@@ -52,7 +49,6 @@ const AllFoods = () => {
         <div className="max-w-screen-xl mx-auto">
           <h1 className="text-4xl font-bold mb-6">All Foods</h1>
 
-          {/* Search & Filter UI */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <input
               type="text"
@@ -81,7 +77,6 @@ const AllFoods = () => {
             </div>
           </div>
 
-          {/* Food Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {filteredFoods.length > 0 ? (
               filteredFoods.map((item) => (

@@ -2,34 +2,10 @@ import Navbar from "../Components/Navbar";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import CheckoutFooter from "../Components/CheckOut";
-import Lottie from "lottie-react";
 import Empty from "../Components/Empty";
 
 const CartPage = () => {
-  const { cart, updateCart } = useCart();
-
-  const increment = (id) => {
-    const updated = cart.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    updateCart(updated);
-  };
-
-  const decrement = (id) => {
-    const updated = cart
-      .map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-          : item
-      )
-      .filter((item) => item.quantity > 0);
-    updateCart(updated);
-  };
-
-  const remove = (id) => {
-    const updated = cart.filter((item) => item.id !== id);
-    updateCart(updated);
-  };
+  const { cart, incrementItem, decrementItem, removeFromCart } = useCart();
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -41,49 +17,49 @@ const CartPage = () => {
           <Empty message="Your Cart is empty." />
         ) : (
           <>
-            {/* Cart Items */}
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {cart.map((item) => (
                 <div
                   key={item.id}
-                  className="border rounded p-4 bg-white text-center shadow  h-[300px]"
+                  className="border rounded-lg p-4 bg-white text-center shadow-sm h-[260px] flex flex-col justify-between"
                 >
-                  <img
-                    src={item.defaultImg}
-                    alt={item.title}
-                    className="h-28 mx-auto object-contain"
-                  />
-                  <h3 className="font-bold mt-2">{item.title}</h3>
-                  <p className="text-sm text-gray-600">Price: ₹{item.price}</p>
-
-                  <div className="flex items-center justify-center gap-3 my-3">
+                  <div>
+                    <img
+                      src={item.defaultImg}
+                      alt={item.title}
+                      className="h-24 mx-auto object-contain"
+                    />
+                    <h3 className="font-bold mt-2 text-base">{item.title}</h3>
+                    <p className="text-sm text-gray-600">Price: ₹{item.price}</p>
+                  </div>
+                  <div>
+                    <div className="flex items-center justify-center gap-3 my-2">
+                      <button
+                        onClick={() => decrementItem(item.id)}
+                        className="p-2 bg-gray-200 rounded hover:bg-gray-300"
+                      >
+                        <FaMinus />
+                      </button>
+                      <span className="text-lg">{item.quantity}</span>
+                      <button
+                        onClick={() => incrementItem(item.id)}
+                        className="p-2 bg-gray-200 rounded hover:bg-gray-300"
+                      >
+                        <FaPlus />
+                      </button>
+                    </div>
                     <button
-                      onClick={() => decrement(item.id)}
-                      className="p-2 bg-gray-200 rounded hover:bg-gray-300"
+                      onClick={() => removeFromCart(item.id)}
+                      className="text-red-500 hover:text-red-700 mt-2"
                     >
-                      <FaMinus />
-                    </button>
-                    <span className="text-lg">{item.quantity}</span>
-                    <button
-                      onClick={() => increment(item.id)}
-                      className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-                    >
-                      <FaPlus />
+                      <FaTrash />
                     </button>
                   </div>
-
-                  <button
-                    onClick={() => remove(item.id)}
-                    className="text-red-500 hover:text-red-700 mt-2"
-                  >
-                    <FaTrash />
-                  </button>
                 </div>
               ))}
             </div>
 
-            {/* Checkout Summary */}
-            <div className="w-full lg:w-1/4 bg-purple-600 text-white p-6 rounded shadow">
+            <div className="w-full lg:w-1/4 bg-purple-600 text-white p-6 rounded shadow h-[600px]">
               <h2 className="text-xl font-bold mb-4">Checkout</h2>
               {cart.map((item) => (
                 <div key={item.id} className="flex justify-between mb-2">

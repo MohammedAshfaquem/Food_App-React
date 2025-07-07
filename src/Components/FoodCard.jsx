@@ -9,9 +9,9 @@ const FoodCard = ({ item, viewMode = "simple" }) => {
   const [hover, setHover] = useState(false);
   const { user } = useAuth();
   const cart = useCart();
-  const wishlist = useWishlist();
+  const {wishlist,removeFromWishlist,addToWishlist} = useWishlist();
 
-  const isWishlisted = wishlist.wishlist.some((w) => w.id === item.id);
+  const isWishlisted = wishlist.some((w) => w.id === item.id);
   const view = viewMode === "detailed";
 
   const handleWishlistToggle = (e) => {
@@ -22,9 +22,9 @@ const FoodCard = ({ item, viewMode = "simple" }) => {
     }
 
     if (isWishlisted) {
-      wishlist.removeFromWishlist(item.id);
+      removeFromWishlist(item.id);
     } else {
-      wishlist.addToWishlist(item);
+      addToWishlist(item);
     }
   };
 

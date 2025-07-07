@@ -1,4 +1,3 @@
-// src/Components/Footer.jsx
 import {
   Mail,
   Phone,
@@ -12,7 +11,6 @@ const Footer = () => {
   return (
     <footer className="bg-[#f7f5f1] text-gray-700 border-t py-10 px-6">
       <div className="max-w-7xl mx-auto flex flex-wrap justify-between gap-8">
-        {/* Logo and Contact */}
         <div className="min-w-[200px]">
           <h2 className="text-2xl font-bold text-purple-600 mb-4">FoodRush</h2>
           <div className="flex items-center mb-2">
@@ -29,7 +27,6 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Popular Foods */}
         <div className="min-w-[150px]">
           <h3 className="font-bold mb-3 text-violet-600 ">Popular Foods</h3>
           <ul className="space-y-1">
@@ -48,7 +45,6 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Social */}
         <div className="min-w-[150px]">
           <h3 className="font-bold mb-3 text-violet-600">Social</h3>
           <ul className="space-y-2">
@@ -56,7 +52,7 @@ const Footer = () => {
               <a
                 href="https://www.facebook.com/bridgeonfb"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="facebook"
                 className="flex items-center gap-2"
               >
                 <Facebook className="w-4 h-4" /> Facebook
@@ -66,7 +62,7 @@ const Footer = () => {
               <a
                 href="https://www.instagram.com/bridgeon.in/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="insta"
                 className="flex items-center gap-2"
               >
                 <Instagram className="w-4 h-4" /> Instagram
@@ -76,7 +72,7 @@ const Footer = () => {
               <a
                 href="https://www.youtube.com/@Bridgeon"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="utube"
                 className="flex items-center gap-2"
               >
                 <Youtube className="w-4 h-4" /> YouTube
@@ -86,7 +82,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Bottom Line */}
       <div className="text-center text-sm text-gray-500 mt-10 border-t pt-4">
         © 2025 Templately. All rights reserved.
       </div>

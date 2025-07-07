@@ -1,4 +1,12 @@
-const Input = ({ label, type = "text", value, onChange, name, error,placeholder }) => (
+const Input = ({
+  label,
+  type = "text",
+  value,
+  onChange,
+  name,
+  error,
+  placeholder,
+}) => (
   <div style={{ marginBottom: "10px" }}>
     {label && <label>{label}</label>}
     <br />
@@ -12,9 +20,9 @@ const Input = ({ label, type = "text", value, onChange, name, error,placeholder 
         padding: "8px",
         width: "100%",
         backgroundColor: "white",
-        border: "1px solid grey",       // ✅ grey border added
-        borderRadius: "4px",            // optional: add rounded corners
-        outline: "none"                 // optional: remove blue border on focus
+        border: "1px solid grey",
+        borderRadius: "4px",
+        outline: "none",
       }}
     />
     {error && <small style={{ color: "red" }}>{error}</small>}
