@@ -7,55 +7,24 @@ import { toast } from "react-toastify";
 const OrdersPage = () => {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handlePlaceOrder = async () => {
+  const fetchOrders = async () => {
     if (!user) return;
 
     try {
+      setLoading(true);
       const res = await API.get(`/users/${user.id}`);
-      const currentCart = res.data.cart || [];
-      const existingOrders = res.data.orders || [];
-
-      if (currentCart.length === 0) {
-        toast.info("Your cart is empty.");
-        return;
-      }
-
-      const timestamp = new Date().toISOString();
-
-      const ordersWithTime = currentCart.map((item) => ({
-        ...item,
-        orderedAt: timestamp,
-        status: "Processing", // default status
-      }));
-
-      const updatedOrders = [...existingOrders, ...ordersWithTime];
-
-      await API.patch(`/users/${user.id}`, {
-        cart: [],
-        orders: updatedOrders,
-      });
-
-      toast.success("Order placed successfully!");
-      setOrders(updatedOrders);
+      setOrders(res.data.orders || []);
     } catch (err) {
-      toast.error("Failed to place order");
-      console.error(err);
+      toast.error("Error fetching orders.");
+      console.error("Error fetching orders:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      if (!user) return;
-
-      try {
-        const res = await API.get(`/users/${user.id}`);
-        setOrders(res.data.orders || []);
-      } catch (err) {
-        console.error("Error fetching orders:", err);
-      }
-    };
-
     fetchOrders();
   }, [user]);
 
@@ -79,20 +48,33 @@ const OrdersPage = () => {
 
   const getStatusBadge = (status) => {
     const base = "text-xs font-semibold px-2 py-1 rounded-full";
-    if (status === "Delivered") {
+    if (status.toLowerCase() === "delivered") {
       return `${base} bg-green-100 text-green-700`;
-    } else {
+    } else if (status.toLowerCase() === "pending") {
       return `${base} bg-yellow-100 text-yellow-700`;
+    } else if (status.toLowerCase() === "processing") {
+      return `${base} bg-blue-100 text-blue-700`;
     }
+    return `${base} bg-gray-100 text-gray-700`; // default fallback
   };
 
   return (
     <>
       <Navbar />
-      <div className="max-w-5xl mx-auto px-6 py-10 min-h-screen">
-        <h1 className="text-3xl font-bold mb-8">Your Orders</h1>
+      <div className="max-w-5xl mx-auto px-6 py-10 min-h-screen ">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl font-bold">Your Orders</h1>
+          <button
+            onClick={fetchOrders}
+            className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+          >
+            Refresh
+          </button>
+        </div>
 
-        {orders.length === 0 ? (
+        {loading ? (
+          <p>Loading orders...</p>
+        ) : orders.length === 0 ? (
           <p className="text-gray-500">You haven’t placed any orders yet.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -112,6 +94,7 @@ const OrdersPage = () => {
                   Quantity: {item.quantity || 1}
                 </p>
 
+                {/* Order Date and Time */}
                 {item.orderedAt && (
                   <div className="mt-3 text-sm text-gray-600 space-y-1">
                     <p>
@@ -123,6 +106,7 @@ const OrdersPage = () => {
                   </div>
                 )}
 
+                {/* Status */}
                 {item.status && (
                   <div className="mt-4">
                     <span className={getStatusBadge(item.status)}>

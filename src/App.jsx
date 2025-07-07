@@ -1,6 +1,6 @@
 import { ToastContainer } from "react-toastify";
 import "./App.css";
-import Home from "./Components/Home";
+import Home from "./pages/Home";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -15,38 +15,55 @@ import OrdersPage from "./pages/Orders";
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/register" element={<Register />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/wishlist" element={<WishlistPage />} />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/"
-            element={
-              <PrivateRoute>
-                <Home />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/all-foods"
-            element={
-              <PrivateRoute>
-                <AllFoods />
-              </PrivateRoute>
-            }
-          />
-          <Route path="/orders" element={<OrdersPage />} />
-        </Routes>
-      </BrowserRouter>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        newestOnTop
-        pauseOnFocusLoss
-      />
+        {/* Private Routes */}
+        <Route
+          path="/"
+          element={
+            <PrivateRoute>
+              <Home />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/all-foods"
+          element={
+            <PrivateRoute>
+              <AllFoods />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <PrivateRoute>
+              <CartPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/wishlist"
+          element={
+            <PrivateRoute>
+              <WishlistPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <PrivateRoute>
+              <OrdersPage />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
+
+      <ToastContainer position="top-right" autoClose={2000} newestOnTop />
     </>
   );
 }

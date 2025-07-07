@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const PopularItems = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/products")
@@ -14,39 +15,25 @@ const PopularItems = () => {
   }, []);
 
   return (
-    <section className="bg-[#f7f5f1] py-16 px-8">
+    <section className="bg-[#f7f5f1] py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-screen-xl mx-auto">
-        <p className="text-purple-600 font-semibold uppercase mb-2">
+        <p className="text-purple-600 font-semibold uppercase text-sm sm:text-base mb-2">
           Crispy, Every Bite Taste
         </p>
-        <h2 className="text-5xl font-extrabold text-black mb-10">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black mb-8 sm:mb-10">
           Popular Food Items
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {products.slice(0, 4).map((item) => (
-            <FoodCard item={item} viewMode="simple" />
+            <FoodCard key={item.id} item={item} />
           ))}
         </div>
-        <div
-          style={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
+
+        <div className="flex justify-center mt-10">
           <button
             onClick={() => navigate("/all-foods")}
-            style={{
-              cursor: "pointer",
-              marginTop: "40px",
-              height: "60px",
-              width: "200px",
-              backgroundColor: "violet",
-              fontWeight: "bold",
-              borderRadius: "12px",
-              color: "white",
-            }}
+            className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg transition"
           >
             View More
           </button>

@@ -4,38 +4,46 @@ import FoodCard from "../Components/FoodCard";
 import Navbar from "../Components/Navbar";
 
 const AllFoods = () => {
-  const [foods, setFoods] = useState([]);
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState(null); // 'price' | 'rating' | 'stock'
+  const [foods, setFoods] = useState([]); // All foods fetched from API
+  const [search, setSearch] = useState(""); // Search query
+  const [filter, setFilter] = useState(null); // Filter state (price, rating, stock)
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/products")
+      .get("http://localhost:3000/products") // Fetching data from API
       .then((res) => setFoods(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
-  const applyFilter = () => {
-    let filtered = [...foods];
+  // Filtering and sorting logic directly in the render
+  const getFilteredFoods = () => {
+    let result = foods.slice(); // Create a fresh copy of the foods array
 
+    // Search filtering
     if (search.trim()) {
-      filtered = filtered.filter((item) =>
+      result = result.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       );
     }
 
+    // Sorting
     if (filter === "price") {
-      filtered.sort((a, b) => a.price - b.price);
+      result = result.sort((a, b) => a.price - b.price);
     } else if (filter === "rating") {
-      filtered.sort((a, b) => b.rating - a.rating);
+      result = result.sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
     } else if (filter === "stock") {
-      filtered = filtered.filter((item) => item.inStock);
+      result = result.filter((item) => item.inStock);
     }
 
-    return filtered;
+    return result;
   };
 
-  const filteredFoods = applyFilter();
+  const handleFilterReset = () => {
+    setFilter(null); // Reset filter to "No Filter"
+    setSearch(""); // Optional: Clear search as well
+  };
+
+  const filteredFoods = getFilteredFoods(); // Directly call the function to get the filtered foods
 
   return (
     <>
@@ -54,38 +62,22 @@ const AllFoods = () => {
               className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/2"
             />
             <div className="flex flex-wrap gap-3">
-              <button
-                onClick={() => setFilter(null)}
-                className={`px-4 py-2 rounded text-sm font-semibold ${
-                  filter === null ? "bg-purple-600 text-white" : "bg-gray-200"
-                }`}
-              >
-                No Filter
-              </button>
-              <button
-                onClick={() => setFilter("price")}
-                className={`px-4 py-2 rounded text-sm font-semibold ${
-                  filter === "price" ? "bg-purple-600 text-white" : "bg-gray-200"
-                }`}
-              >
-                Sort by Price
-              </button>
-              <button
-                onClick={() => setFilter("rating")}
-                className={`px-4 py-2 rounded text-sm font-semibold ${
-                  filter === "rating" ? "bg-purple-600 text-white" : "bg-gray-200"
-                }`}
-              >
-                Sort by Rating
-              </button>
-              <button
-                onClick={() => setFilter("stock")}
-                className={`px-4 py-2 rounded text-sm font-semibold ${
-                  filter === "stock" ? "bg-purple-600 text-white" : "bg-gray-200"
-                }`}
-              >
-                In Stock
-              </button>
+              {[
+                { key: null, label: "No Filter" },
+                { key: "price", label: "Sort by Price" },
+                { key: "rating", label: "Sort by Rating" },
+                { key: "stock", label: "In Stock" },
+              ].map(({ key, label }) => (
+                <button
+                  key={key ?? "nofilter"}
+                  onClick={() => (key ? setFilter(key) : handleFilterReset())}
+                  className={`px-4 py-2 rounded text-sm font-semibold ${
+                    filter === key ? "bg-purple-600 text-white" : "bg-gray-200"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
 
