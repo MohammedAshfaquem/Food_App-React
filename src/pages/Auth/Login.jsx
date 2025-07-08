@@ -1,29 +1,33 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ email: "", password: "" });
+  const validationSchema = Yup.object({
+    email: Yup.string().email("Invalid email").required("Email is required"),
+    password: Yup.string().min(4, "Min 4 characters").required("Password is required"),
+  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm({ ...form, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await login(form.email, form.password);
-      toast.success("Login successful 🎉");
-      navigate("/");
-    } catch (err) {
-      toast.error(err.message);
-    }
-  };
+  const formik = useFormik({
+    initialValues: { email: "", password: "" },
+    validationSchema,
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        await login(values.email, values.password);
+        toast.success("Login successful 🎉");
+        navigate("/");
+      } catch (err) {
+        toast.error(err.message);
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
@@ -43,38 +47,41 @@ const Login = () => {
 
       <div className="w-full md:w-1/2 flex items-center justify-center bg-white px-6 py-10">
         <form
-          onSubmit={handleSubmit}
+          onSubmit={formik.handleSubmit}
           className="w-full max-w-sm p-8 rounded shadow-md bg-white"
         >
           <div className="mb-4">
             <input
               type="email"
               name="email"
-              value={form.email}
-              onChange={handleChange}
               placeholder="Enter Email"
               className="w-full px-4 py-2 border rounded outline-blue-500"
-              required
+              {...formik.getFieldProps("email")}
             />
+            {formik.touched.email && formik.errors.email && (
+              <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+            )}
           </div>
+
           <div className="mb-4">
             <input
               type="password"
               name="password"
-              value={form.password}
-              onChange={handleChange}
               placeholder="Password"
               className="w-full px-4 py-2 border rounded outline-blue-500"
-              required
+              {...formik.getFieldProps("password")}
             />
+            {formik.touched.password && formik.errors.password && (
+              <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
+            )}
           </div>
-          <div className="text-right text-sm text-blue-500 mb-4 cursor-pointer">
-          </div>
+
           <button
             type="submit"
-            className="w-full text-white py-2 rounded hover:opacity-80 transition bg-violet-600  cursor-pointer"
+            disabled={formik.isSubmitting}
+            className="w-full text-white py-2 rounded hover:opacity-80 transition bg-violet-600 cursor-pointer"
           >
-            Sign In
+            {formik.isSubmitting ? "Signing In..." : "Sign In"}
           </button>
 
           <p className="text-center text-sm mt-4 md:hidden">

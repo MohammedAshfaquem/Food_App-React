@@ -12,6 +12,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [dropDown, setdropDown] = useState(false);
+
   const cartCount = cart.length;
   const wishlistCount = wishlist.length;
 
@@ -20,8 +21,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-purple-400  text-white font-bold">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between ml-20">
+    <nav className="bg-purple-400 text-white font-bold">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between md:ml-20">
         <div
           className="text-lg font-semibold cursor-pointer"
           onClick={() => navigate("/")}
@@ -103,6 +104,7 @@ const Navbar = () => {
               </div>
             )}
           </div>
+
           <div className="md:hidden">
             <Menu
               className="cursor-pointer"

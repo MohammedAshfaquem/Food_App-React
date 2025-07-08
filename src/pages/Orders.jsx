@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
 import Navbar from "../Components/Navbar";
 import { toast } from "react-toastify";
+import Empty from "../Components/Empty";
 
 const OrdersPage = () => {
   const { user } = useAuth();
@@ -75,7 +76,7 @@ const OrdersPage = () => {
         {loading ? (
           <p>Loading orders...</p>
         ) : orders.length === 0 ? (
-          <p className="text-gray-500">You haven’t placed any orders yet.</p>
+          <Empty message={"You haven’t placed any orders yet."} />
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orders.map((item, index) => (

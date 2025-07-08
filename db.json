@@ -7,7 +7,19 @@
       "password": "test123",
       "role": "user",
       "isBlock": false,
-      "cart": [],
+      "cart": [
+        {
+          "id": "10",
+          "title": "Barbecue Chicken",
+          "count": "5 PRODUCTS",
+          "price": 239,
+          "rating": 4.4,
+          "inStock": true,
+          "defaultImg": "/Barbeque.png",
+          "description": "Smoky barbecue chicken with tangy sauce.",
+          "quantity": 4
+        }
+      ],
       "wishlist": [],
       "orders": [
         {
@@ -37,6 +49,34 @@
           "orderedAt": "2025-07-07T16:19:14.230Z",
           "address": "Chicken H Near",
           "status": "Pending"
+        },
+        {
+          "id": "3",
+          "title": "Noodles",
+          "count": "5 PRODUCTS",
+          "price": 99,
+          "rating": 3.8,
+          "inStock": false,
+          "defaultImg": "/Noodles.png",
+          "description": "Spicy stir-fried noodles with veggies and soy sauce.",
+          "quantity": 1,
+          "orderedAt": "2025-07-08T03:45:24.992Z",
+          "address": "adnan H",
+          "status": "Pending"
+        },
+        {
+          "id": "10",
+          "title": "Barbecue Chicken",
+          "count": "5 PRODUCTS",
+          "price": 239,
+          "rating": 4.4,
+          "inStock": true,
+          "defaultImg": "/Barbeque.png",
+          "description": "Smoky barbecue chicken with tangy sauce.",
+          "quantity": 4,
+          "orderedAt": "2025-07-08T05:43:17.767Z",
+          "address": "New H ",
+          "status": "Pending"
         }
       ]
     },
@@ -63,43 +103,65 @@
       "wishlist": []
     },
     {
-      "id": "d539",
-      "name": "Adnan",
-      "email": "Anas23@gmail.com",
-      "password": "fhionkd",
-      "role": "user",
-      "isBlock": false,
-      "cart": [],
-      "orders": [],
-      "wishlist": []
-    },
-    {
-      "id": "ef1d",
-      "name": "Mealio",
-      "email": "tesdbjdmt@gmail.com",
-      "password": "hjn f",
-      "role": "user",
-      "isBlock": false,
-      "cart": [],
-      "orders": [],
-      "wishlist": []
-    },
-    {
-      "id": "c814",
-      "name": "akshay",
-      "email": "akshay2323@gmail.com",
-      "password": "akshay123",
-      "role": "user",
-      "isBlock": false,
-      "cart": [],
-      "orders": [],
-      "wishlist": []
-    },
-    {
       "id": "42b1",
       "name": "Anas",
       "email": "anas@gmail.com",
       "password": "anas123",
+      "role": "user",
+      "isBlock": false,
+      "cart": [
+        {
+          "id": "10",
+          "title": "Barbecue Chicken",
+          "count": "5 PRODUCTS",
+          "price": 239,
+          "rating": 4.4,
+          "inStock": true,
+          "defaultImg": "/Barbeque.png",
+          "description": "Smoky barbecue chicken with tangy sauce.",
+          "quantity": 1
+        },
+        {
+          "id": "9",
+          "title": "Grilled Flank Steak",
+          "count": "5 PRODUCTS",
+          "price": 299,
+          "rating": 4.6,
+          "inStock": true,
+          "defaultImg": "/Meat.png",
+          "description": "Tender grilled flank steak with herbs and garlic butter.",
+          "quantity": 1
+        }
+      ],
+      "orders": [],
+      "wishlist": [
+        {
+          "id": "9",
+          "title": "Grilled Flank Steak",
+          "count": "5 PRODUCTS",
+          "price": 299,
+          "rating": 4.6,
+          "inStock": true,
+          "defaultImg": "/Meat.png",
+          "description": "Tender grilled flank steak with herbs and garlic butter."
+        },
+        {
+          "id": "2",
+          "title": "Pizza",
+          "count": "5 PRODUCTS",
+          "price": 299,
+          "rating": 4.6,
+          "inStock": false,
+          "defaultImg": "/pizza.png",
+          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil."
+        }
+      ]
+    },
+    {
+      "id": "d34c",
+      "name": "Adnan",
+      "email": "adnan@gmail.com",
+      "password": "adnan123",
       "role": "user",
       "isBlock": false,
       "cart": [],
@@ -194,7 +256,7 @@
       "count": "5 PRODUCTS",
       "price": 299,
       "rating": 4.6,
-      "inStock": true,
+      "inStock": false,
       "defaultImg": "/Meat.png",
       "description": "Tender grilled flank steak with herbs and garlic butter."
     },
@@ -214,7 +276,7 @@
       "count": "5 PRODUCTS",
       "price": 189,
       "rating": 4.5,
-      "inStock": true,
+      "inStock": false,
       "defaultImg": "/CreamyPasta.png",
       "description": "Rich creamy pasta with herbs and grilled chicken."
     },
