@@ -36,17 +36,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await API.get(`/users?email=${email}&password=${password}`);
-    if (res.data.length > 0) {
-      const user = res.data[0];
-      if (user.isBlock) throw new Error("User is blocked");
-
-      setUser(user);
-      localStorage.setItem("userId", user.id);
-      return user;
-    } else {
+    const res = await API.get(
+      `users?email=${email}&password=${password}`
+    );
+    const users = res.data;
+    if (users.length === 0) {
       throw new Error("Invalid credentials");
     }
+    const user = users[0];
+    setUser(user);
+    localStorage.setItem("userId", user.id);
+    return user;
   };
 
   const register = async (newUser) => {

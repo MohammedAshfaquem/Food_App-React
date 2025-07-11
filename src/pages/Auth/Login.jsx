@@ -18,9 +18,17 @@ const Login = () => {
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        await login(values.email, values.password);
+        // login should return the user object with role
+        const loggedInUser = await login(values.email, values.password);
+
         toast.success("Login successful 🎉");
-        navigate("/");
+
+        // Navigate based on user role
+        if (loggedInUser.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/user-dashboard");
+        }
       } catch (err) {
         toast.error(err.message);
       } finally {
@@ -31,6 +39,7 @@ const Login = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
+      {/* Left Side (for larger screens) */}
       <div className="hidden md:flex w-1/2 bg-[#f4f7ff] flex-col justify-center items-center p-10">
         <h1 className="text-3xl font-bold mb-2 text-center">Sign In to Recharge Direct</h1>
         <p className="text-gray-600 mb-4 text-center">
@@ -45,11 +54,13 @@ const Login = () => {
         <img src="/Intro.png" alt="Login visual" className="max-w-[300px] mt-4" />
       </div>
 
+      {/* Right Side (form area) */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-white px-6 py-10">
         <form
           onSubmit={formik.handleSubmit}
           className="w-full max-w-sm p-8 rounded shadow-md bg-white"
         >
+          {/* Email Input */}
           <div className="mb-4">
             <input
               type="email"
@@ -63,6 +74,7 @@ const Login = () => {
             )}
           </div>
 
+          {/* Password Input */}
           <div className="mb-4">
             <input
               type="password"
@@ -76,6 +88,7 @@ const Login = () => {
             )}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={formik.isSubmitting}
@@ -84,6 +97,7 @@ const Login = () => {
             {formik.isSubmitting ? "Signing In..." : "Sign In"}
           </button>
 
+          {/* Mobile Register Prompt */}
           <p className="text-center text-sm mt-4 md:hidden">
             Don’t have an account?{" "}
             <span
