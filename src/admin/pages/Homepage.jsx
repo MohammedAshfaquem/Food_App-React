@@ -1,3 +1,4 @@
+// src/pages/admin/AdminHome.jsx
 import React, { useEffect, useState } from "react";
 import API from "../../services/api";
 import {
@@ -20,6 +21,7 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
+import CountUp from "react-countup"; // ✅ Import CountUp
 
 const pieColors = ["#a78bfa", "#c4b5fd", "#ddd6fe"];
 
@@ -29,7 +31,6 @@ const AdminHome = () => {
   const [products, setProducts] = useState([]);
   const [weeklyRevenue, setWeeklyRevenue] = useState([]);
 
-  // 🔶 Fetch all data: users, orders, products
   useEffect(() => {
     const fetchData = async () => {
       const userRes = await API.get("/users");
@@ -47,7 +48,6 @@ const AdminHome = () => {
     fetchData();
   }, []);
 
-  // 🔵 Calculate revenue only from Delivered orders
   useEffect(() => {
     const calculateWeeklyRevenue = () => {
       const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -70,15 +70,12 @@ const AdminHome = () => {
     calculateWeeklyRevenue();
   }, [orders]);
 
-  // 🧮 Totals & Filtering
   const totalRevenue = orders
     .filter((o) => o.status === "Delivered")
     .reduce((acc, cur) => acc + (cur.price || 0) * (cur.quantity || 1), 0);
 
   const totalDelivered = orders.filter((o) => o.status === "Delivered").length;
-  const totalProcessing = orders.filter(
-    (o) => o.status === "Processing"
-  ).length;
+  const totalProcessing = orders.filter((o) => o.status === "Processing").length;
 
   const statusData = [
     {
@@ -132,7 +129,8 @@ const AdminHome = () => {
         <SummaryCard
           icon={<FaMoneyBillWave />}
           label="Revenue"
-          value={`₹${totalRevenue}`}
+          value={totalRevenue}
+          isCurrency
           color="pink"
           cardBgClass="bg-pink-200"
         />
@@ -205,7 +203,7 @@ const AdminHome = () => {
               <Tooltip />
               <Bar
                 dataKey="revenue"
-                fill="#ddd6fe"
+                fill="#a78bfa"
                 radius={[10, 10, 0, 0]}
                 label={{ position: "top", fill: "#374151", fontSize: 12 }}
               />
@@ -217,19 +215,25 @@ const AdminHome = () => {
   );
 };
 
-// 🧩 Reusable Summary Card Component
-const SummaryCard = ({ icon, label, value, color, cardBgClass, extra }) => (
+// 🧩 Reusable Summary Card Component with CountUp
+const SummaryCard = ({ icon, label, value, color, cardBgClass, extra, isCurrency }) => (
   <div
     className={`shadow rounded p-4 flex items-center gap-4 ${cardBgClass} 
       transform transition-transform duration-300 hover:scale-103 hover:shadow-xl`}
   >
-    {" "}
-    <div className={`bg-white p-3 rounded-full`}>
+    <div className="bg-white p-3 rounded-full">
       {React.cloneElement(icon, { className: `text-${color}-600 text-xl` })}
     </div>
     <div>
       <p className="text-sm text-black">{label}</p>
-      <p className="text-2xl font-bold text-black">{value}</p>
+      <p className="text-2xl font-bold text-black">
+        <CountUp
+          end={typeof value === "number" ? value : parseInt(value.replace(/[^\d]/g, ""))}
+          prefix={isCurrency ? "₹" : ""}
+          duration={3.2}
+          separator=","
+        />
+      </p>
       {extra && <p className="text-xs text-grey mt-1">{extra}</p>}
     </div>
   </div>

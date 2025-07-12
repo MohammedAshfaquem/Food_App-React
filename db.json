@@ -20,7 +20,7 @@
           "quantity": 7,
           "orderedAt": "2025-07-11T08:12:20.662Z",
           "address": "new world",
-          "status": "Pending"
+          "status": "Delivered"
         }
       ]
     },
@@ -31,8 +31,53 @@
       "password": "test123",
       "role": "user",
       "isBlock": false,
-      "cart": [],
-      "wishlist": [],
+      "cart": [
+        {
+          "id": "2",
+          "title": "Pizza",
+          "count": "5 PRODUCTS",
+          "price": 259,
+          "rating": 4.6,
+          "inStock": true,
+          "defaultImg": "/pizza.png",
+          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil.",
+          "quantity": 1
+        },
+        {
+          "id": "4",
+          "title": "Fries",
+          "count": "5 PRODUCTS",
+          "price": 89,
+          "rating": 4.2,
+          "inStock": true,
+          "defaultImg": "/Fries.png",
+          "description": "Crispy golden French fries with seasoning.",
+          "quantity": 1
+        },
+        {
+          "id": "8",
+          "title": "Grilled Chicken",
+          "count": "5 PRODUCTS",
+          "price": 219,
+          "rating": 4.7,
+          "inStock": true,
+          "defaultImg": "/grilledchicken.png",
+          "description": "Tender grilled chicken breast with smoky flavor.",
+          "quantity": 2
+        }
+      ],
+      "wishlist": [
+        {
+          "id": "2",
+          "title": "Pizza",
+          "count": "5 PRODUCTS",
+          "price": 259,
+          "rating": 4.6,
+          "inStock": true,
+          "defaultImg": "/pizza.png",
+          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil."
+        }
+      ],
       "orders": [
         {
           "id": "6",
@@ -229,7 +274,17 @@
           "inStock": false,
           "defaultImg": "/pizza.png",
           "description": "Cheesy pepperoni pizza with fresh tomatoes and basil."
-        }
+        },
+         {
+      "id": "4",
+      "title": "Fries",
+      "count": "5 PRODUCTS",
+      "price": 89,
+      "rating": 4.2,
+      "inStock": true,
+      "defaultImg": "/Fries.png",
+      "description": "Crispy golden French fries with seasoning."
+    }
       ]
     },
     {
@@ -242,6 +297,16 @@
       "cart": [],
       "orders": [],
       "wishlist": [
+         {
+      "id": "4",
+      "title": "Fries",
+      "count": "5 PRODUCTS",
+      "price": 89,
+      "rating": 4.2,
+      "inStock": true,
+      "defaultImg": "/Fries.png",
+      "description": "Crispy golden French fries with seasoning."
+    },
         {
           "id": "9",
           "title": "Grilled Flank Steak",
@@ -289,7 +354,7 @@
           "quantity": 1,
           "orderedAt": "2025-07-08T10:57:10.693Z",
           "address": "ggvhbnmkj",
-          "status": "Pending"
+          "status": "Delivered"
         },
         {
           "id": "6",
@@ -303,14 +368,14 @@
           "quantity": 20,
           "orderedAt": "2025-07-08T10:57:10.693Z",
           "address": "ggvhbnmkj",
-          "status": "Pending"
+          "status": "Delivered"
         }
       ],
       "wishlist": []
     }
   ],
   "products": [
-      {
+    {
       "id": "1",
       "title": "Burger",
       "count": "5 PRODUCTS",

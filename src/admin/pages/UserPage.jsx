@@ -55,49 +55,53 @@ const UserPage = () => {
   };
 
   return (
-    <div className="p-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {users.map((user) => (
-        <div
-          key={user.id}
-          className="bg-white p-4 rounded-xl shadow border hover:shadow-lg transition"
-        >
-          <div className="flex justify-between items-center mb-2">
-            <div>
-              <h3 className="font-bold text-lg">{user.name}</h3>
-              <p className="text-sm">Email: {user.email}</p>
-              <p className="text-xs text-gray-400">
-                {user.isBlock ? "Blocked" : "Active"}
-              </p>
+    <>
+      <h2 className="text-2xl font-bold ml-6 mt-6 ">Users </h2>
+
+      <div className="p-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {users.map((user) => (
+          <div
+            key={user.id}
+            className="bg-white p-4 rounded-xl shadow border hover:shadow-lg transition"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <div>
+                <h3 className="font-bold text-lg">{user.name}</h3>
+                <p className="text-sm">Email: {user.email}</p>
+                <p className="text-xs text-gray-400">
+                  {user.isBlock ? "Blocked" : "Active"}
+                </p>
+              </div>
+              <button
+                onClick={() => toggleBlock(user.id, user.isBlock)}
+                className={`px-3 py-1 rounded text-white text-sm ${
+                  user.isBlock ? "bg-green-600" : "bg-red-500"
+                }`}
+              >
+                {user.isBlock ? "Unblock" : "Block"}
+              </button>
             </div>
+
+            <hr className="my-2" />
+
+            <div className="text-sm space-y-1">
+              <p>
+                🛒 Cart: {user.cart?.length || 0} | ❤️ Wishlist:{" "}
+                {user.wishlist?.length || 0}
+              </p>
+              <p>📦 Orders: {user.orders?.length || 0}</p>
+            </div>
+
             <button
-              onClick={() => toggleBlock(user.id, user.isBlock)}
-              className={`px-3 py-1 rounded text-white text-sm ${
-                user.isBlock ? "bg-green-600" : "bg-red-500"
-              }`}
+              onClick={() => navigate(`/admin/users/${user.id}`)}
+              className="mt-3 bg-purple-600 text-white text-sm py-1 px-3 rounded"
             >
-              {user.isBlock ? "Unblock" : "Block"}
+              View More
             </button>
           </div>
-
-          <hr className="my-2" />
-
-          <div className="text-sm space-y-1">
-            <p>
-              🛒 Cart: {user.cart?.length || 0} | ❤️ Wishlist:{" "}
-              {user.wishlist?.length || 0}
-            </p>
-            <p>📦 Orders: {user.orders?.length || 0}</p>
-          </div>
-
-          <button
-            onClick={() => navigate(`/admin/users/${user.id}`)}
-            className="mt-3 bg-purple-600 text-white text-sm py-1 px-3 rounded"
-          >
-            View More
-          </button>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 };
 

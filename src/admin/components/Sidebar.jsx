@@ -5,14 +5,15 @@ import {
   FaUtensils,
   FaHeart,
   FaHistory,
-  FaCog,
   FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext"; // adjust path if needed
+import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import "sweetalert2/src/sweetalert2.scss";
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
@@ -29,44 +30,75 @@ const Sidebar = () => {
   ];
 
   const handleLogout = () => {
-    logout(); // Clear user and localStorage
-    toast.success("Logged out successfully");
-    navigate("/login");
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you really want to logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        toast.success("Logged out successfully");
+        navigate("/login");
+      } else {
+        toast.info("Logout cancelled");
+      }
+    });
   };
 
   return (
-    <aside className="w-64 h-screen bg-white shadow-lg p-6 fixed top-0 left-0 z-50">
-      <h1 className="text-2xl font-bold text-purple-800 mb-8">
-        FoodRush<span className="text-grey-800">.</span>
-      </h1>
-      <nav className="flex flex-col gap-4">
-        {menu.map((item) => (
-          <NavLink
-            key={item.name}
-            to={item.path}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-                isActive
-                  ? "bg-purple-400 text-white"
-                  : "text-gray-600 hover:bg-purple-100"
-              }`
-            }
-          >
-            <span className="text-lg">{item.icon}</span>
-            <span>{item.name}</span>
-          </NavLink>
-        ))}
+    <>
+      {/* Overlay for mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
+          onClick={onClose}
+        />
+      )}
 
-        {/* 🔴 LogOut Button */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-red-100 hover:text-red-600 transition"
-        >
-          <FaSignOutAlt className="text-lg" />
-          <span>LogOut</span>
-        </button>
-      </nav>
-    </aside>
+      <div
+        className={`h-screen w-64 bg-white shadow-md p-6 
+    fixed top-0 left-0 z-50 transform transition-transform duration-300 ease-in-out
+    ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+    md:translate-x-0 md:sticky md:top-0`}
+      >
+        <h1 className="text-2xl font-bold text-purple-800 mb-10">
+          FoodRush<span className="text-gray-700">.</span>
+        </h1>
+
+        <nav className="flex flex-col gap-2">
+          {menu.map((item) => (
+            <NavLink
+              key={item.name}
+              to={item.path}
+              onClick={onClose}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-2 rounded-md text-base font-medium transition ${
+                  isActive
+                    ? "bg-purple-500 text-white"
+                    : "text-gray-700 hover:bg-purple-100"
+                }`
+              }
+            >
+              <span className="text-lg">{item.icon}</span>
+              <span>{item.name}</span>
+            </NavLink>
+          ))}
+
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-4 py-2 rounded-md text-gray-700 hover:bg-red-100 hover:text-red-600 transition"
+          >
+            <FaSignOutAlt className="text-lg" />
+            <span>Logout</span>
+          </button>
+        </nav>
+      </div>
+    </>
   );
 };
 

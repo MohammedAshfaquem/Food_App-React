@@ -3,11 +3,33 @@ import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import CheckoutFooter from "../Components/CheckOut";
 import Empty from "../Components/Empty";
+import Swal from "sweetalert2"; // ✅ Import SweetAlert2
 
 const CartPage = () => {
   const { cart, incrementItem, decrementItem, removeFromCart } = useCart();
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const total = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  // 🔶 Confirm delete with SweetAlert2
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove this item from the cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeFromCart(id);
+        Swal.fire("Removed!", "Item removed from cart.", "success");
+      }
+    });
+  };
 
   return (
     <>
@@ -30,7 +52,9 @@ const CartPage = () => {
                       className="h-24 mx-auto object-contain"
                     />
                     <h3 className="font-bold mt-2 text-base">{item.title}</h3>
-                    <p className="text-sm text-gray-600">Price: ₹{item.price}</p>
+                    <p className="text-sm text-gray-600">
+                      Price: ₹{item.price}
+                    </p>
                   </div>
                   <div>
                     <div className="flex items-center justify-center gap-3 my-2">
@@ -49,7 +73,7 @@ const CartPage = () => {
                       </button>
                     </div>
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => handleDelete(item.id)} // ✅ SweetAlert confirm delete
                       className="text-red-500 hover:text-red-700 mt-2"
                     >
                       <FaTrash />
@@ -59,6 +83,7 @@ const CartPage = () => {
               ))}
             </div>
 
+            {/* 🔵 Checkout Section */}
             <div className="w-full lg:w-1/4 bg-purple-600 text-white p-6 rounded shadow h-[600px]">
               <h2 className="text-xl font-bold mb-4">Checkout</h2>
               {cart.map((item) => (

@@ -11,24 +11,24 @@ import AllFoods from "./pages/AllFoods";
 import CartPage from "./pages/CartPage";
 import WishlistPage from "./pages/WishlistPage";
 import OrdersPage from "./pages/Orders";
-import PrivateRoute from "./Components/PrivateRoute";
+import PrivateRoute from "./pages/Auth/PrivateRoute.jsx";
 
 // Admin pages and layout
 import AdminLayout from "./admin/AdminLayout";
 import Dashboard from "./admin/pages/Dashboard";
 import FoodOrders from "./admin/pages/FoodOrders";
 import Favorites from "./admin/pages/Favorites";
-import OrderHistory from "./admin/pages/OrderHistory";
 import ProductManagement from "./admin/pages/ProductManagement.jsx";
 import UserDetailsPage from "./admin/pages/UserDetails.jsx";
 import UserPage from "./admin/pages/UserPage.jsx";
+import RoleRedirect from "./pages/Auth/Role.jsx";
 
 function App() {
   return (
     <>
       <Routes>
-        {/* 🔁 Redirect root to user dashboard */}
-        <Route path="/" element={<Navigate to="/user-dashboard" />} />
+        {/* 🔁 Redirect root to correct dashboard based on role */}
+        <Route path="/" element={<RoleRedirect />} />
 
         {/* 🌐 Public Routes */}
         <Route path="/login" element={<Login />} />
@@ -39,7 +39,7 @@ function App() {
         <Route
           path="/all-foods"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["user"]}>
               <AllFoods />
             </PrivateRoute>
           }
@@ -47,7 +47,7 @@ function App() {
         <Route
           path="/cart"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["user"]}>
               <CartPage />
             </PrivateRoute>
           }
@@ -55,7 +55,7 @@ function App() {
         <Route
           path="/wishlist"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["user"]}>
               <WishlistPage />
             </PrivateRoute>
           }
@@ -63,17 +63,24 @@ function App() {
         <Route
           path="/orders"
           element={
-            <PrivateRoute>
+            <PrivateRoute allowedRoles={["user"]}>
               <OrdersPage />
             </PrivateRoute>
           }
         />
 
         {/* 🧑‍💼 Admin Routes (Nested inside AdminLayout) */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          path="/admin"
+          element={
+            <PrivateRoute allowedRoles={["admin"]}>
+              <AdminLayout />
+            </PrivateRoute>
+          }
+        >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="users" element={<UserPage />} />
-          <Route path="users/:id" element={<UserDetailsPage />} /> {/* ✅ FIXED */}
+          <Route path="users/:id" element={<UserDetailsPage />} />
           <Route path="food-orders" element={<FoodOrders />} />
           <Route path="favorites" element={<Favorites />} />
           <Route path="order-history" element={<ProductManagement />} />

@@ -3,15 +3,34 @@ import Navbar from "../Components/Navbar";
 import { useWishlist } from "../context/Wishlistcontext";
 import { useCart } from "../context/CartContext";
 import Empty from "../Components/Empty";
+import Swal from "sweetalert2"; // ✅ Import SweetAlert2
 
 const WishlistPage = () => {
-  const {moveToCart,wishlist,removeFromWishlist} = useWishlist();
+  const { moveToCart, wishlist, removeFromWishlist } = useWishlist();
   const cart = useCart();
+
+  // 🔶 Handle delete with SweetAlert
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove this item from your wishlist?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, remove it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeFromWishlist(id);
+        Swal.fire("Removed!", "Item removed from wishlist.", "success");
+      }
+    });
+  };
 
   return (
     <>
       <Navbar />
-      <section className="p-6 sm:p-10 min-h-screen bg-[#f7f5f1] ">
+      <section className="p-6 sm:p-10 min-h-screen bg-[#f7f5f1]">
         <h1 className="text-3xl font-bold mb-6">My Wishlist</h1>
 
         {wishlist.length === 0 ? (
@@ -35,13 +54,13 @@ const WishlistPage = () => {
                 <p className="text-sm mb-2 text-black">₹{item.price}</p>
                 <div className="flex justify-center gap-3 mt-2">
                   <button
-                    onClick={() =>moveToCart(item, cart)}
+                    onClick={() => moveToCart(item, cart)}
                     className="bg-purple-700 text-white px-4 py-1 rounded-full flex items-center gap-2"
                   >
                     <FaShoppingCart /> Add to Cart
                   </button>
                   <button
-                    onClick={() => removeFromWishlist(item.id)}
+                    onClick={() => handleDelete(item.id)} // ✅ SweetAlert confirm delete
                     className="text-red-500 hover:text-red-500"
                   >
                     <FaTrash />
