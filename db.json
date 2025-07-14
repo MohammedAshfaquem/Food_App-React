@@ -25,202 +25,151 @@
       ]
     },
     {
-      "id": "205c",
-      "name": "Test User",
-      "email": "test@gmail.com",
-      "password": "test123",
+      "id": "user001",
+      "name": "Fatima",
+      "email": "fatima@example.com",
+      "password": "fatima123",
       "role": "user",
       "isBlock": false,
       "cart": [
         {
-          "id": "2",
-          "title": "Pizza",
-          "count": "5 PRODUCTS",
-          "price": 259,
-          "rating": 4.6,
+          "id": "1",
+          "title": "Burger",
+          "price": 149,
+          "rating": 4.3,
           "inStock": true,
-          "defaultImg": "/pizza.png",
-          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil.",
-          "quantity": 1
-        },
-        {
-          "id": "4",
-          "title": "Fries",
-          "count": "5 PRODUCTS",
-          "price": 89,
-          "rating": 4.2,
-          "inStock": true,
-          "defaultImg": "/Fries.png",
-          "description": "Crispy golden French fries with seasoning.",
-          "quantity": 1
-        },
-        {
-          "id": "8",
-          "title": "Grilled Chicken",
-          "count": "5 PRODUCTS",
-          "price": 219,
-          "rating": 4.7,
-          "inStock": true,
-          "defaultImg": "/grilledchicken.png",
-          "description": "Tender grilled chicken breast with smoky flavor.",
+          "defaultImg": "/Burger.png",
+          "description": "Juicy grilled burger with melted cheese and lettuce.",
           "quantity": 2
         }
       ],
       "wishlist": [
         {
-          "id": "2",
-          "title": "Pizza",
-          "count": "5 PRODUCTS",
-          "price": 259,
-          "rating": 4.6,
+          "id": "10",
+          "title": "Barbecue Chicken",
+          "price": 239,
+          "rating": 4.4,
           "inStock": true,
-          "defaultImg": "/pizza.png",
-          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil."
+          "defaultImg": "/Barbeque.png",
+          "description": "Smoky barbecue chicken with tangy sauce."
         }
       ],
       "orders": [
         {
           "id": "6",
           "title": "Broast",
-          "count": "5 PRODUCTS",
           "price": 179,
           "rating": 4.4,
           "inStock": false,
           "defaultImg": "/broast.png",
           "description": "Crispy fried broast chicken with flavorful coating.",
-          "quantity": 5,
-          "orderedAt": "2025-07-07T15:57:50.105Z",
-          "address": "maliyekkale H mampuram",
-          "status": "Delivered"
-        },
-        {
-          "id": "10",
-          "title": "Barbecue Chicken",
-          "count": "5 PRODUCTS",
-          "price": 239,
-          "rating": 4.4,
-          "inStock": true,
-          "defaultImg": "/Barbeque.png",
-          "description": "Smoky barbecue chicken with tangy sauce.",
           "quantity": 3,
-          "orderedAt": "2025-07-07T16:19:14.230Z",
-          "address": "Chicken H Near",
+          "orderedAt": "2025-07-10T14:35:00.000Z",
+          "address": "Taj Residency, Mumbai",
           "status": "Delivered"
-        },
-        {
-          "id": "3",
-          "title": "Noodles",
-          "count": "5 PRODUCTS",
-          "price": 99,
-          "rating": 3.8,
-          "inStock": false,
-          "defaultImg": "/Noodles.png",
-          "description": "Spicy stir-fried noodles with veggies and soy sauce.",
-          "quantity": 1,
-          "orderedAt": "2025-07-08T03:45:24.992Z",
-          "address": "adnan H",
-          "status": "Delivered"
-        },
-        {
-          "id": "10",
-          "title": "Barbecue Chicken",
-          "count": "5 PRODUCTS",
-          "price": 239,
-          "rating": 4.4,
-          "inStock": true,
-          "defaultImg": "/Barbeque.png",
-          "description": "Smoky barbecue chicken with tangy sauce.",
-          "quantity": 4,
-          "orderedAt": "2025-07-08T05:43:17.767Z",
-          "address": "New H ",
-          "status": "Delivered"
-        },
-        {
-          "id": "1",
-          "title": "Burger",
-          "count": "5 PRODUCTS",
-          "price": 149,
-          "rating": 4.3,
-          "inStock": true,
-          "defaultImg": "/Burger.png",
-          "description": "Juicy grilled burger with melted cheese and lettuce.",
-          "quantity": 3,
-          "orderedAt": "2025-07-08T09:33:25.244Z",
-          "address": "j mfj\n",
-          "status": "Delivered"
-        },
-        {
-          "id": "14",
-          "title": "Chicken Shawarma",
-          "count": "5 PRODUCTS",
-          "price": 139,
-          "rating": 4.3,
-          "inStock": true,
-          "defaultImg": "/shawarma.png",
-          "description": "Delicious chicken shawarma wrapped in very Soft pita bread.",
-          "quantity": 1,
-          "orderedAt": "2025-07-11T04:15:06.066Z",
-          "address": "New York ",
-          "status": "Delivered"
-        },
+        }
+      ]
+    },
+    {
+      "id": "user002",
+      "name": "Zara",
+      "email": "zara@example.com",
+      "password": "zara456",
+      "role": "user",
+      "isBlock": false,
+      "cart": [
         {
           "id": "13",
           "title": "Beef Burger",
-          "count": "5 PRODUCTS",
           "price": 169,
           "rating": 4.6,
           "inStock": true,
           "defaultImg": "/BeefBurger.png",
           "description": "Juicy beef burger with cheese, lettuce, and pickles.",
-          "quantity": 1,
-          "orderedAt": "2025-07-11T04:15:06.066Z",
-          "address": "New York ",
-          "status": "Delivered"
+          "quantity": 1
+        }
+      ],
+      "wishlist": [
+        {
+          "id": "2",
+          "title": "Pizza",
+          "price": 259,
+          "rating": 4.6,
+          "inStock": true,
+          "defaultImg": "/pizza.png",
+          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil."
         },
+        {
+          "id": "5",
+          "title": "Ruti",
+          "price": 129,
+          "rating": 4,
+          "inStock": false,
+          "defaultImg": "/beef-ruti.png",
+          "description": "Soft ruti with spicy beef curry, served hot."
+        }
+      ],
+      "orders": [
+        {
+          "id": "3",
+          "title": "Noodles",
+          "price": 99,
+          "rating": 3.8,
+          "inStock": false,
+          "defaultImg": "/Noodles.png",
+          "description": "Spicy stir-fried noodles with veggies and soy sauce.",
+          "quantity": 2,
+          "orderedAt": "2025-07-09T18:10:00.000Z",
+          "address": "12 Garden St, Lucknow",
+          "status": "Delivered"
+        }
+      ]
+    },
+    {
+      "id": "user003",
+      "name": "Rizwan",
+      "email": "rizwan@example.com",
+      "password": "rizpass",
+      "role": "user",
+      "isBlock": false,
+      "cart": [
+        {
+          "id": "8",
+          "title": "Grilled Chicken",
+          "price": 219,
+          "rating": 4.7,
+          "inStock": true,
+          "defaultImg": "/grilledchicken.png",
+          "description": "Tender grilled chicken breast with smoky flavor.",
+          "quantity": 3
+        }
+      ],
+      "wishlist": [
         {
           "id": "15",
           "title": "Crab",
-          "count": "5 PRODUCTS",
           "price": 139,
           "rating": 4.3,
           "inStock": false,
           "defaultImg": "/Crab.png",
-          "description": "Delicious Crab Bioled .",
-          "quantity": 1,
-          "orderedAt": "2025-07-11T04:15:06.066Z",
-          "address": "New York ",
-          "status": "Delivered"
-        },
-        {
-          "id": "2",
-          "title": "Pizza",
-          "count": "5 PRODUCTS",
-          "price": 299,
-          "rating": 4.6,
-          "inStock": true,
-          "defaultImg": "/pizza.png",
-          "description": "Cheesy pepperoni pizza with fresh tomatoes and basil.",
-          "quantity": 6,
-          "orderedAt": "2025-07-11T04:15:06.066Z",
-          "address": "New York ",
-          "status": "Delivered"
-        },
-        {
-          "id": "9",
-          "title": "Grilled Flank Steak",
-          "count": "5 PRODUCTS",
-          "price": 299,
-          "rating": 4.6,
-          "inStock": true,
-          "defaultImg": "/Meat.png",
-          "description": "Tender grilled flank steak with herbs and garlic butter.",
-          "quantity": 10,
-          "orderedAt": "2025-07-11T04:15:06.066Z",
-          "address": "New York ",
-          "status": "Delivered"
+          "description": "Delicious Crab Bioled ."
         }
       ],
-      "isBlocked": false
+      "orders": [
+        {
+          "id": "12",
+          "title": "Submarine Sandwich",
+          "price": 159,
+          "rating": 4.2,
+          "inStock": true,
+          "defaultImg": "/sandwich.png",
+          "description": "Fresh submarine sandwich with meats, cheese, and veggies.",
+          "quantity": 4,
+          "orderedAt": "2025-07-11T08:50:00.000Z",
+          "address": "Gulmarg Residency, Pune",
+          "status": "Pending"
+        }
+      ]
     },
     {
       "id": "42b1",
@@ -275,16 +224,16 @@
           "defaultImg": "/pizza.png",
           "description": "Cheesy pepperoni pizza with fresh tomatoes and basil."
         },
-         {
-      "id": "4",
-      "title": "Fries",
-      "count": "5 PRODUCTS",
-      "price": 89,
-      "rating": 4.2,
-      "inStock": true,
-      "defaultImg": "/Fries.png",
-      "description": "Crispy golden French fries with seasoning."
-    }
+        {
+          "id": "4",
+          "title": "Fries",
+          "count": "5 PRODUCTS",
+          "price": 89,
+          "rating": 4.2,
+          "inStock": true,
+          "defaultImg": "/Fries.png",
+          "description": "Crispy golden French fries with seasoning."
+        }
       ]
     },
     {
@@ -297,16 +246,16 @@
       "cart": [],
       "orders": [],
       "wishlist": [
-         {
-      "id": "4",
-      "title": "Fries",
-      "count": "5 PRODUCTS",
-      "price": 89,
-      "rating": 4.2,
-      "inStock": true,
-      "defaultImg": "/Fries.png",
-      "description": "Crispy golden French fries with seasoning."
-    },
+        {
+          "id": "4",
+          "title": "Fries",
+          "count": "5 PRODUCTS",
+          "price": 89,
+          "rating": 4.2,
+          "inStock": true,
+          "defaultImg": "/Fries.png",
+          "description": "Crispy golden French fries with seasoning."
+        },
         {
           "id": "9",
           "title": "Grilled Flank Steak",
@@ -340,7 +289,7 @@
           "quantity": 7,
           "orderedAt": "2025-07-08T09:49:08.348Z",
           "address": "BridgeOn H",
-          "status": "Pending"
+          "status": "Delivered"
         },
         {
           "id": "2",
@@ -372,6 +321,98 @@
         }
       ],
       "wishlist": []
+    },
+    {
+      "id": "0e12",
+      "name": "Akshay",
+      "email": "12@gmail",
+      "password": "asdfg",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "orders": [],
+      "wishlist": []
+    },
+    {
+      "id": "ced0",
+      "name": "Ashfaque",
+      "email": "test@gmail.com",
+      "password": "test123",
+      "role": "user",
+      "isBlock": false,
+      "cart": [],
+      "orders": [
+        {
+          "id": "f8a9",
+          "title": "CocoCOla",
+          "price": 20,
+          "rating": 3.5,
+          "inStock": true,
+          "defaultImg": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW72eidTGAiA8mqo-ddlX_QyJwR9K_liBLHg&s",
+          "description": "Body Cooling water",
+          "quantity": 10,
+          "orderedAt": "2025-07-14T05:39:47.261Z",
+          "address": "madrid Spain",
+          "status": "Processing"
+        },
+        {
+          "id": "11",
+          "title": "Creamy Pasta",
+          "count": "5 PRODUCTS",
+          "price": 30,
+          "rating": 4.5,
+          "inStock": false,
+          "defaultImg": "/CreamyPasta.png",
+          "description": "Rich creamy pasta with herbs and grilled chicken.",
+          "quantity": 1,
+          "orderedAt": "2025-07-14T05:39:47.261Z",
+          "address": "madrid Spain",
+          "status": "Processing"
+        },
+        {
+          "id": "15",
+          "title": "Crab",
+          "count": "5 PRODUCTS",
+          "price": 139,
+          "rating": 4.3,
+          "inStock": false,
+          "defaultImg": "/Crab.png",
+          "description": "Delicious Crab Bioled .",
+          "quantity": 1,
+          "orderedAt": "2025-07-14T05:39:47.261Z",
+          "address": "madrid Spain",
+          "status": "Processing"
+        },
+        {
+          "id": "14",
+          "title": "Chicken Shawarma",
+          "count": "5 PRODUCTS",
+          "price": 139,
+          "rating": 4.3,
+          "inStock": true,
+          "defaultImg": "/shawarma.png",
+          "description": "Delicious chicken shawarma wrapped in very Soft pita bread.",
+          "quantity": 1,
+          "orderedAt": "2025-07-14T05:39:47.261Z",
+          "address": "madrid Spain",
+          "status": "Processing"
+        },
+        {
+          "id": "10",
+          "title": "Barbecue Chicken",
+          "count": "5 PRODUCTS",
+          "price": 239,
+          "rating": 4.4,
+          "inStock": true,
+          "defaultImg": "/Barbeque.png",
+          "description": "Smoky barbecue chicken with tangy sauce.",
+          "quantity": 7,
+          "orderedAt": "2025-07-14T05:39:47.261Z",
+          "address": "madrid Spain",
+          "status": "Processing"
+        }
+      ],
+      "wishlist": []
     }
   ],
   "products": [
@@ -379,7 +420,7 @@
       "id": "1",
       "title": "Burger",
       "count": "5 PRODUCTS",
-      "price": 149,
+      "price": 200,
       "rating": 4.3,
       "inStock": true,
       "defaultImg": "/Burger.png",
@@ -533,6 +574,15 @@
       "inStock": true,
       "defaultImg": "/combo.png",
       "description": "Burger, fries, and a drink combo meal."
+    },
+    {
+      "id": "f8a9",
+      "title": "CocoCOla",
+      "price": 20,
+      "rating": 3.5,
+      "inStock": true,
+      "defaultImg": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTW72eidTGAiA8mqo-ddlX_QyJwR9K_liBLHg&s",
+      "description": "Body Cooling water"
     }
   ]
 }

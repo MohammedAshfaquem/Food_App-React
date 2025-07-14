@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import FoodCard from "../Components/FoodCard";
-import Navbar from "../Components/Navbar";
+import FoodCard from "../components/FoodCard";
+import Navbar from "../components/Navbar";
 import API from "../services/api";
 
+const ITEMS_PER_PAGE = 8;
+
 const AllFoods = () => {
-  const [foods, setFoods] = useState([]); 
-  const [search, setSearch] = useState(""); 
-  const [filter, setFilter] = useState(null); 
+  const [foods, setFoods] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    API
-      .get("/products")
+    API.get("/products")
       .then((res) => setFoods(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
   const getFilteredFoods = () => {
-    let result = foods.slice(); 
+    let result = foods.slice();
 
     if (search.trim()) {
       result = result.filter((item) =>
@@ -38,9 +40,24 @@ const AllFoods = () => {
   const handleFilterReset = () => {
     setFilter(null);
     setSearch("");
+    setCurrentPage(1); // Reset to first page on filter reset
   };
 
-  const filteredFoods = getFilteredFoods(); 
+  const filteredFoods = getFilteredFoods();
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredFoods.length / ITEMS_PER_PAGE);
+  const paginatedFoods = filteredFoods.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Optional: scroll to top on page change
+    }
+  };
 
   return (
     <>
@@ -54,7 +71,10 @@ const AllFoods = () => {
               type="text"
               placeholder="Search food by name..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1); // Reset to first page on search
+              }}
               className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/2"
             />
             <div className="flex flex-wrap gap-3">
@@ -66,7 +86,14 @@ const AllFoods = () => {
               ].map(({ key, label }) => (
                 <button
                   key={key ?? "nofilter"}
-                  onClick={() => (key ? setFilter(key) : handleFilterReset())}
+                  onClick={() => {
+                    if (key) {
+                      setFilter(key);
+                    } else {
+                      handleFilterReset();
+                    }
+                    setCurrentPage(1); // Reset to page 1 when filtering
+                  }}
                   className={`px-4 py-2 rounded text-sm font-semibold ${
                     filter === key ? "bg-purple-600 text-white" : "bg-gray-200"
                   }`}
@@ -78,14 +105,47 @@ const AllFoods = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {filteredFoods.length > 0 ? (
-              filteredFoods.map((item) => (
+            {paginatedFoods.length > 0 ? (
+              paginatedFoods.map((item) => (
                 <FoodCard key={item.id} item={item} viewMode="detailed" />
               ))
             ) : (
               <p className="text-gray-500">No food items found.</p>
             )}
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-10 space-x-2">
+              <button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Prev
+              </button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-3 py-1 rounded ${
+                    currentPage === i + 1
+                      ? "bg-purple-600 text-white"
+                      : "bg-gray-200"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </section>
     </>

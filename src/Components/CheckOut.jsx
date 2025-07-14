@@ -9,7 +9,6 @@ const CheckoutFooter = () => {
   const { user } = useAuth();
   const { cart, updateCart } = useCart();
   const navigate = useNavigate();
-
   const [showAddressInput, setShowAddressInput] = useState(false);
   const [address, setAddress] = useState("");
 

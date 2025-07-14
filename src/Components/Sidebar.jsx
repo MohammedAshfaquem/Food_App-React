@@ -1,4 +1,3 @@
-// 🟡 Sidebar.jsx
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   FaTachometerAlt,
@@ -8,7 +7,7 @@ import {
   FaUser,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import "sweetalert2/src/sweetalert2.scss";
@@ -52,7 +51,6 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Overlay for mobile */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"

@@ -31,7 +31,6 @@ const UserDetailsPage = () => {
       <p className="text-md mb-4">🔐 Status: {user.isBlock ? "Blocked" : "Active"}</p>
       <hr className="my-4" />
 
-      {/* Cart Section */}
       <h3 className="font-semibold text-xl mb-2">🛒 Cart Items</h3>
       {user.cart?.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

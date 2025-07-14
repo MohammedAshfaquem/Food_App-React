@@ -4,24 +4,24 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 
 // Public/User pages
-import Home from "./pages/Home";
-import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
+import Login from "./features/auth/Login.jsx";
+import Register from "./features/auth/Register.jsx";
 import AllFoods from "./pages/AllFoods";
 import CartPage from "./pages/CartPage";
 import WishlistPage from "./pages/WishlistPage";
 import OrdersPage from "./pages/Orders";
-import PrivateRoute from "./pages/Auth/PrivateRoute.jsx";
 
 // Admin pages and layout
-import AdminLayout from "./admin/AdminLayout";
-import Dashboard from "./admin/pages/Dashboard";
-import FoodOrders from "./admin/pages/FoodOrders";
-import Favorites from "./admin/pages/Favorites";
-import ProductManagement from "./admin/pages/ProductManagement.jsx";
-import UserDetailsPage from "./admin/pages/UserDetails.jsx";
-import UserPage from "./admin/pages/UserPage.jsx";
-import RoleRedirect from "./pages/Auth/Role.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import FoodOrders from "./pages/FoodOrders.jsx";
+import Favorites from "./pages/Favorites.jsx";
+import ProductManagement from "./features/products/ProductManagement.jsx.jsx";
+import UserDetailsPage from "./features/users/UserDetails.jsx";
+import UserPage from "./features/users/UserPage.jsx";
+import PrivateRoute from "./routes/PrivateRoute.jsx";
+import UserLayout from "./layouts/UserLayout.jsx";
+import RoleRedirect from "./routes/RoleRedirect.jsx";
 
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
         {/* 🌐 Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/user-dashboard" element={<Home />} />
+        <Route path="/user-dashboard" element={<UserLayout />} />
 
         {/* 🔐 Private User Routes */}
         <Route

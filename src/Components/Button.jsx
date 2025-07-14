@@ -1,4 +1,4 @@
-const Button = ({ text, onClick, type = "button",width }) => (
+const Button = ({ text, onClick, type = "button", width }) => (
   <button
     type={type}
     onClick={onClick}
@@ -8,7 +8,7 @@ const Button = ({ text, onClick, type = "button",width }) => (
       color: "white",
       border: "none",
       cursor: "pointer",
-      width:{width}
+      width: { width },
     }}
   >
     {text}

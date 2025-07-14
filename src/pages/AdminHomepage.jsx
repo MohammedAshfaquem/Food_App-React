@@ -1,6 +1,6 @@
 // src/pages/admin/AdminHome.jsx
 import React, { useEffect, useState } from "react";
-import API from "../../services/api";
+import API from "../services/api";
 import {
   FaChartBar,
   FaBoxOpen,
@@ -21,7 +21,7 @@ import {
   YAxis,
   CartesianGrid,
 } from "recharts";
-import CountUp from "react-countup"; // ✅ Import CountUp
+import CountUp from "react-countup";
 
 const pieColors = ["#a78bfa", "#c4b5fd", "#ddd6fe"];
 
