@@ -340,7 +340,19 @@
       "password": "test123",
       "role": "user",
       "isBlock": false,
-      "cart": [],
+      "cart": [
+        {
+          "id": "6",
+          "title": "Broast",
+          "count": "5 PRODUCTS",
+          "price": 179,
+          "rating": 4.4,
+          "inStock": false,
+          "defaultImg": "/broast.png",
+          "description": "Crispy fried broast chicken with flavorful coating.",
+          "quantity": 1
+        }
+      ],
       "orders": [
         {
           "id": "f8a9",
@@ -412,7 +424,18 @@
           "status": "Processing"
         }
       ],
-      "wishlist": []
+      "wishlist": [
+        {
+          "id": "6",
+          "title": "Broast",
+          "count": "5 PRODUCTS",
+          "price": 179,
+          "rating": 4.4,
+          "inStock": false,
+          "defaultImg": "/broast.png",
+          "description": "Crispy fried broast chicken with flavorful coating."
+        }
+      ]
     }
   ],
   "products": [

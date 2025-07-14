@@ -27,6 +27,7 @@ function App() {
   return (
     <>
       <Routes>
+        
         {/* 🔁 Redirect root to correct dashboard based on role */}
         <Route path="/" element={<RoleRedirect />} />
 

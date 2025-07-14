@@ -28,7 +28,6 @@ const UserPage = () => {
 
   const toggleBlock = async (id, isBlock) => {
     const action = isBlock ? "unblock" : "block";
-
     const result = await MySwal.fire({
       title: `Are you sure you want to ${action} this user?`,
       icon: "warning",
