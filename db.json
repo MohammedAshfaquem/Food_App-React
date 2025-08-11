@@ -340,19 +340,7 @@
       "password": "test123",
       "role": "user",
       "isBlock": false,
-      "cart": [
-        {
-          "id": "6",
-          "title": "Broast",
-          "count": "5 PRODUCTS",
-          "price": 179,
-          "rating": 4.4,
-          "inStock": false,
-          "defaultImg": "/broast.png",
-          "description": "Crispy fried broast chicken with flavorful coating.",
-          "quantity": 1
-        }
-      ],
+      "cart": [],
       "orders": [
         {
           "id": "f8a9",
@@ -422,9 +410,7 @@
           "orderedAt": "2025-07-14T05:39:47.261Z",
           "address": "madrid Spain",
           "status": "Processing"
-        }
-      ],
-      "wishlist": [
+        },
         {
           "id": "6",
           "title": "Broast",
@@ -433,9 +419,42 @@
           "rating": 4.4,
           "inStock": false,
           "defaultImg": "/broast.png",
-          "description": "Crispy fried broast chicken with flavorful coating."
+          "description": "Crispy fried broast chicken with flavorful coating.",
+          "quantity": 2,
+          "orderedAt": "2025-08-11T04:03:36.045Z",
+          "address": "New",
+          "status": "Pending"
+        },
+        {
+          "id": "12",
+          "title": "Submarine Sandwich",
+          "count": "5 PRODUCTS",
+          "price": 159,
+          "rating": 4.2,
+          "inStock": true,
+          "defaultImg": "/sandwich.png",
+          "description": "Fresh submarine sandwich with meats, cheese, and veggies.",
+          "quantity": 3,
+          "orderedAt": "2025-08-11T04:03:36.045Z",
+          "address": "New",
+          "status": "Pending"
+        },
+        {
+          "id": "11",
+          "title": "Creamy Pasta",
+          "count": "5 PRODUCTS",
+          "price": 30,
+          "rating": 4.5,
+          "inStock": false,
+          "defaultImg": "/CreamyPasta.png",
+          "description": "Rich creamy pasta with herbs and grilled chicken.",
+          "quantity": 2,
+          "orderedAt": "2025-08-11T04:03:36.045Z",
+          "address": "New",
+          "status": "Pending"
         }
-      ]
+      ],
+      "wishlist": []
     }
   ],
   "products": [

@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { WishlistProvider } from "./context/Wishlistcontext.jsx";
-
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter> 
