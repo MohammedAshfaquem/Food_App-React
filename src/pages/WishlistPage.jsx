@@ -29,6 +29,7 @@ const WishlistPage = () => {
 
   return (
     <>
+    {/* Navbar */}
       <Navbar />
       <section className="p-6 sm:p-10 min-h-screen bg-[#f7f5f1]">
         <h1 className="text-3xl font-bold mb-6">My Wishlist</h1>
