@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
-import Input from "../../components/input";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Input from "../../components/input";
 
 const Register = () => {
   const { register } = useAuth();
