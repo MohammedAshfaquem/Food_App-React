@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Input from "../../components/Input";
+import Input from '../../Components/Input'
 
 const Register = () => {
   const { register } = useAuth();
