@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FoodCard from "../components/FoodCard";
-import Navbar from "../components/Navbar";
+import Navbar from "../Components/Navbar";
 import API from "../services/api";
 
 const ITEMS_PER_PAGE = 8;

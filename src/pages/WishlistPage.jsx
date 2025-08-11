@@ -3,7 +3,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import Empty from "../components/Empty";
 import Swal from "sweetalert2"; // ✅ Import SweetAlert2
-import Navbar from "../components/Navbar";
+import Navbar from "../Components/Navbar";
 
 const WishlistPage = () => {
   const { moveToCart, wishlist, removeFromWishlist } = useWishlist();

@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../Components/Navbar";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import CheckoutFooter from "../components/CheckOut";
