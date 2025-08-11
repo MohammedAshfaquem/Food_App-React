@@ -3,7 +3,7 @@ import { FaHeart, FaShoppingCart, FaStar } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
-import { useWishlist } from "../context/Wishlistcontext";
+import { useWishlist } from "../context/WishlistContext";
 
 const FoodCard = ({ item, viewMode = "simple" }) => {
   const [hover, setHover] = useState(false);

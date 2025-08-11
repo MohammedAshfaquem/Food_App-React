@@ -3,7 +3,7 @@ import { User, Heart, ShoppingCart, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { useWishlist } from "../context/Wishlistcontext";
+import { useWishlist } from "../context/WishlistContext";
 
 const Navbar = () => {
   const { cart } = useCart();
