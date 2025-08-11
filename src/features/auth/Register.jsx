@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Input from '../../components/Input'
+import Inputfeild from "../../Components/Input";
 
 const Register = () => {
   const { register } = useAuth();
@@ -53,7 +53,7 @@ const Register = () => {
             Welcome back you’ve been missed!
           </p>
 
-          <Input
+          <Inputfeild
             placeholder="Enter your name"
             name="name"
             value={formik.values.name}
@@ -62,7 +62,7 @@ const Register = () => {
             error={formik.touched.name && formik.errors.name}
           />
 
-          <Input
+          <Inputfeild
             placeholder="Enter email"
             name="email"
             value={formik.values.email}
@@ -71,7 +71,7 @@ const Register = () => {
             error={formik.touched.email && formik.errors.email}
           />
 
-          <Input
+          <Inputfeild
             placeholder="Password"
             type="password"
             name="password"
