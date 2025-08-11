@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
-import Navbar from "../components/Navbar";
+import Navbar from "../Components/Navbar";
 import { toast } from "react-toastify";
 import Empty from "../components/Empty";
 
