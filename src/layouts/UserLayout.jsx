@@ -4,7 +4,7 @@ import LandingPage from "../pages/UserHomePage";
 import PopularItems from "../pages/PopularItems";
 import Footer from "../Components/Footer";
 import OurServices from "../pages/Services";
-import SpecialOffers from "../pages/SPecialOffers";
+import SpecialOffers from "../pages/SpecialOffers";
 
 const UserLayout = () => {
   const location = useLocation();
