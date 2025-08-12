@@ -3,11 +3,11 @@ import { toast } from "react-toastify";
 import API from "../../services/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import ProductForm from "../../components/ProductForm";
-import ProductRow from "../../components/ProductRow";
-import ProductViewModal from "../../components/ProductViewModal";
-import EditModal from "../../components/EditModal";
-import ProductCard from "../../components/productCard";
+import ProductForm from "../../Components/ProductForm";
+import ProductRow from "../../Components/ProductRow";
+import ProductViewModal from "../../Components/ProductViewModal";
+import EditModal from "../../Components/EditModal";
+import ProductCard from "../../Components/productCard";
 
 const MySwal = withReactContent(Swal);
 const ITEMS_PER_PAGE = 8;
