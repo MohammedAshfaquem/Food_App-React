@@ -7,7 +7,7 @@ import ProductForm from "../../Components/ProductForm";
 import ProductRow from "../../Components/ProductRow";
 import ProductViewModal from "../../Components/ProductViewModal";
 import EditModal from "../../Components/EditModal";
-import ProductCard from "../../Components/productCard";
+import ProductCard from "../../Components/ProductCard";
 
 const MySwal = withReactContent(Swal);
 const ITEMS_PER_PAGE = 8;
