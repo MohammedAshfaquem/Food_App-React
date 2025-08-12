@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import FoodCard from "../components/FoodCard";
+import FoodCard from "../Components/FoodCard";
 import Navbar from "../Components/Navbar";
 import API from "../services/api";
 

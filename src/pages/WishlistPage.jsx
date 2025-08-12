@@ -1,7 +1,7 @@
 import { FaShoppingCart, FaTrash } from "react-icons/fa";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
-import Empty from "../components/Empty";
+import Empty from "../Components/Empty";
 import Swal from "sweetalert2"; // ✅ Import SweetAlert2
 import Navbar from "../Components/Navbar";
 

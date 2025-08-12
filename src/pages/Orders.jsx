@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
 import Navbar from "../Components/Navbar";
 import { toast } from "react-toastify";
-import Empty from "../components/Empty";
+import Empty from "../Components/Empty";
 
 const OrdersPage = () => {
   const { user } = useAuth();

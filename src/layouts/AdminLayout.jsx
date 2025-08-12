@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { useState } from "react";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../Components/Sidebar";
 import { FaBars } from "react-icons/fa";
 
 const AdminLayout = () => {

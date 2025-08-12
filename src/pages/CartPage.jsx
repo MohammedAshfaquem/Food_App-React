@@ -1,9 +1,9 @@
 import Navbar from "../Components/Navbar";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
-import CheckoutFooter from "../components/CheckOut";
-import Empty from "../components/Empty";
+import CheckoutFooter from "../Components/CheckOut";
 import Swal from "sweetalert2"; // ✅ Import SweetAlert2
+import Empty from "../Components/Empty";
 
 const CartPage = () => {
   const { cart, incrementItem, decrementItem, removeFromCart } = useCart();

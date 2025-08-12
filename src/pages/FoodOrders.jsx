@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 import { toast } from "react-toastify";
-import StatusStepper from "../components/Status";
+import StatusStepper from "../Components/Status";
 
 const FoodOrders = () => {
   const [groupedOrders, setGroupedOrders] = useState([]);

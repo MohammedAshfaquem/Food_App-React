@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import LandingPage from "../pages/UserHomePage";
 import PopularItems from "../pages/PopularItems";
-import Footer from "../components/Footer";
+import Footer from "../Components/Footer";
 import OurServices from "../pages/Services";
 import SpecialOffers from "../pages/SPecialOffers";
 
