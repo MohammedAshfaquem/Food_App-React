@@ -1,4 +1,4 @@
-const Inputfeild = ({
+const Inputfield = ({
   label,
   type = "text",
   value,
@@ -28,4 +28,4 @@ const Inputfeild = ({
     {error && <small style={{ color: "red" }}>{error}</small>}
   </div>
 );
-export default Inputfeild;
+export default Inputfield;
