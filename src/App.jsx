@@ -16,7 +16,7 @@ import AdminLayout from "./layouts/AdminLayout.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import FoodOrders from "./pages/FoodOrders.jsx";
 import Favorites from "./pages/Favorites.jsx";
-import ProductManagement from "./features/products/ProductManagement.jsx.jsx";
+import ProductManagement from "./features/products/ProductManagement.jsx";
 import UserDetailsPage from "./features/users/UserDetails.jsx";
 import UserPage from "./features/users/UserPage.jsx";
 import PrivateRoute from "./routes/PrivateRoute.jsx";
