@@ -12,26 +12,29 @@ const AllFoods = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    API.get("/products")
+    API.get("/products/")
       .then((res) => setFoods(res.data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
   const getFilteredFoods = () => {
-    let result = foods.slice();
+    // Always hide out-of-stock items
+    let result = foods.filter((f) => f.in_stock !== false && (typeof f.inventory !== "number" || f.inventory > 0));
 
+    // Search filter
     if (search.trim()) {
       result = result.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       );
     }
 
+    // Sorting / filtering
     if (filter === "price") {
-      result = result.sort((a, b) => a.price - b.price);
+      result = result.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     } else if (filter === "rating") {
       result = result.sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
     } else if (filter === "stock") {
-      result = result.filter((item) => item.inStock);
+      result = result.filter((item) => item.in_stock); // explicit stock filter retained for UI button
     }
 
     return result;
@@ -40,7 +43,7 @@ const AllFoods = () => {
   const handleFilterReset = () => {
     setFilter(null);
     setSearch("");
-    setCurrentPage(1); // Reset to first page on filter reset
+    setCurrentPage(1);
   };
 
   const filteredFoods = getFilteredFoods();
@@ -55,7 +58,7 @@ const AllFoods = () => {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      window.scrollTo({ top: 0, behavior: "smooth" }); // Optional: scroll to top on page change
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -73,7 +76,7 @@ const AllFoods = () => {
               value={search}
               onChange={(e) => {
                 setSearch(e.target.value);
-                setCurrentPage(1); // Reset to first page on search
+                setCurrentPage(1);
               }}
               className="border border-gray-300 rounded px-4 py-2 w-full md:w-1/2"
             />
@@ -87,12 +90,9 @@ const AllFoods = () => {
                 <button
                   key={key ?? "nofilter"}
                   onClick={() => {
-                    if (key) {
-                      setFilter(key);
-                    } else {
-                      handleFilterReset();
-                    }
-                    setCurrentPage(1); // Reset to page 1 when filtering
+                    if (key) setFilter(key);
+                    else handleFilterReset();
+                    setCurrentPage(1);
                   }}
                   className={`px-4 py-2 rounded text-sm font-semibold ${
                     filter === key ? "bg-purple-600 text-white" : "bg-gray-200"
@@ -107,14 +107,20 @@ const AllFoods = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {paginatedFoods.length > 0 ? (
               paginatedFoods.map((item) => (
-                <FoodCard key={item.id} item={item} viewMode="detailed" />
+                <FoodCard
+                  key={item.id}
+                  item={{
+                    ...item,
+                    defaultImg: item.image || "/default-food.png",
+                  }}
+                  viewMode="detailed"
+                />
               ))
             ) : (
               <p className="text-gray-500">No food items found.</p>
             )}
           </div>
 
-          {/* Pagination Controls */}
           {totalPages > 1 && (
             <div className="flex justify-center mt-10 space-x-2">
               <button

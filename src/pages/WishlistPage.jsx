@@ -29,7 +29,7 @@ const WishlistPage = () => {
 
   return (
     <>
-    {/* Navbar */}
+      {/* Navbar */}
       <Navbar />
       <section className="p-6 sm:p-10 min-h-screen bg-[#f7f5f1]">
         <h1 className="text-3xl font-bold mb-6">My Wishlist</h1>
@@ -50,7 +50,12 @@ const WishlistPage = () => {
                   src={item.defaultImg}
                   alt={item.title}
                   className="h-42 mx-auto mb-4 rounded-full border-4 border-white"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "/default-food.png";
+                  }}
                 />
+
                 <h2 className="font-bold text-lg text-black">{item.title}</h2>
                 <p className="text-sm mb-2 text-black">₹{item.price}</p>
                 <div className="flex justify-center gap-3 mt-2">

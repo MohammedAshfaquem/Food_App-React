@@ -6,82 +6,87 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [access, setAccess] = useState(null);
+  const [refresh, setRefresh] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadUser = async () => {
-      const userId = localStorage.getItem("userId");
-      if (userId) {
-        try {
-          const res = await API.get(`/users/${userId}`);
-          if (res.data) {
-            setUser(res.data);
-          } else {
-            localStorage.removeItem("userId");
-            setUser(null);
-          }
-        } catch (err) {
-          console.error("Failed to load user:", err);
-          localStorage.removeItem("userId");
-          setUser(null);
-        }
-      } else {
-        setUser(null);
-      }
-      setLoading(false);
-    };
+    const storedUser = localStorage.getItem("user");
+    const storedAccess = localStorage.getItem("access");
+    const storedRefresh = localStorage.getItem("refresh");
 
-    loadUser();
+    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedAccess) setAccess(storedAccess);
+    if (storedRefresh) setRefresh(storedRefresh);
+
+    setLoading(false);
   }, []);
 
   const login = async (email, password) => {
-    const res = await API.get(`users?email=${email}&password=${password}`);
-    const users = res.data;
+    const res = await API.post("/auth/login/", {
+      username: email, // <-- SimpleJWT expects "username"
+      password,
+    });
+    // login endpoint
+    const userData = {
+      id: res.data.id,
+      username: res.data.username,
+      email: email,
+      role: res.data.role || "user",
+      is_staff: !!res.data.is_staff,
+      is_superuser: !!res.data.is_superuser,
+    };
+    setUser(userData);
+    setAccess(res.data.access);
+    setRefresh(res.data.refresh);
 
-    if (users.length === 0) {
-      throw new Error("Invalid credentials");
-    }
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("access", res.data.access);
+    localStorage.setItem("refresh", res.data.refresh);
 
-    const user = users[0];
-
-    if (user.isBlock) {
-      throw new Error("Your account has been blocked by admin.");
-    }
-
-    setUser(user);
-    localStorage.setItem("userId", user.id);
-    return user;
+    return userData;
   };
 
   const register = async (newUser) => {
-    const res = await API.get(`/users?email=${newUser.email}`);
-    if (res.data.length > 0) throw new Error("Email already exists");
-
-    const result = await API.post("/users", {
-      ...newUser,
-      role: "user",
-      isBlock: false,
-      cart: [],
-      orders: [],
-      wishlist: [],
-    });
-
-    return result.data;
+    const res = await API.post("/auth/register/", newUser); // fixed endpoint
+    const userData = {
+      id: res.data.data.id,
+      username: res.data.data.username,
+      email: res.data.data.email,
+      role: res.data.data.role || "user",
+    };
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+    return userData;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("userId");
+    setAccess(null);
+    setRefresh(null);
+
+    localStorage.removeItem("user");
+    localStorage.removeItem("access");
+    localStorage.removeItem("refresh");
+
     navigate("/login");
   };
 
-  if (loading) {
-    return <div className="text-center py-10">Loading...</div>;
-  }
-
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        access,
+        refresh,
+        setAccess,
+        setRefresh,
+        loading,
+        login,
+        register,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

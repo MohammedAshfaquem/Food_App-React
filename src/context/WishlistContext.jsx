@@ -1,59 +1,114 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import API from "../services/api";
 import { useAuth } from "./AuthContext";
+import { useCart } from "./CartContext";
 import { toast } from "react-toastify";
 
 const WishlistContext = createContext();
 
+// Helper to normalize image URLs
+const getImageUrl = (img) => {
+  if (!img) return "/default-food.png";
+  return img.startsWith("http") ? img : `http://127.0.0.1:8000${img}`;
+};
+
 export const WishlistProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, access } = useAuth(); // ✅ use access token
+  const { addToCart } = useCart();
   const [wishlist, setWishlist] = useState([]);
 
+  // Fetch wishlist
   useEffect(() => {
     const fetchWishlist = async () => {
-      if (user) {
-        try {
-          const res = await API.get(`/users/${user.id}`);
-          setWishlist(res.data.wishlist || []);
-        } catch (err) {
-          console.error("Wishlist load failed", err);
-        }
-      } else {
+      if (!user || !access) {
+        setWishlist([]);
+        return;
+      }
+
+      try {
+        const res = await API.get("/wishlist/", {
+          headers: { Authorization: `Bearer ${access}` },
+        });
+
+        const products = res.data.data.map((item) => ({
+          ...item.product,
+          defaultImg: getImageUrl(item.product.image),
+        }));
+
+        setWishlist(products);
+      } catch (err) {
+        console.error("Wishlist fetch failed:", err);
         setWishlist([]);
       }
     };
-    fetchWishlist();
-  }, [user]);
 
-  const addToWishlist = async (item) => {
-    if (!user) {
-      toast.info("Please log in to use wishlist.");
-      return navigate("/login");
+    fetchWishlist();
+  }, [user, access]);
+
+  // Add to wishlist
+  const addToWishlist = async (product) => {
+    if (!user || !access) {
+      toast.error("Please log in to add items to wishlist");
+      return;
     }
+
     try {
-      const updated = [...wishlist, item];
-      await API.patch(`/users/${user.id}`, { wishlist: updated });
-      setWishlist(updated);
-      toast.success("Added to wishlist ❤️");
-    } catch {
+      const res = await API.post(
+        "/wishlist/add/",
+        { product_id: product.id },
+        { headers: { Authorization: `Bearer ${access}` } }
+      );
+
+      if (res.data.success) {
+        const newItem = { ...product, defaultImg: getImageUrl(product.image) };
+        setWishlist((prev) => [...prev, newItem]);
+        toast.success("Added to wishlist ❤️");
+      } else {
+        toast.info("Item already in wishlist");
+      }
+    } catch (err) {
+      console.error("Add to wishlist failed:", err.response?.data || err.message);
       toast.error("Failed to add to wishlist");
     }
   };
 
-  const removeFromWishlist = async (id) => {
+  // Remove from wishlist
+  const removeFromWishlist = async (product_id) => {
+    if (!user || !access) return;
+
     try {
-      const updated = wishlist.filter((i) => i.id !== id);
-      await API.patch(`/users/${user.id}`, { wishlist: updated });
-      setWishlist(updated);
-      toast.info("Removed from wishlist 💔");
-    } catch {
-      toast.error("Failed removal from wishlist");
+      await API.delete(`/wishlist/item/${product_id}/delete/`, {
+        headers: { Authorization: `Bearer ${access}` },
+      });
+      setWishlist((prev) => prev.filter((item) => item.id !== product_id));
+      toast.success("Removed from wishlist");
+    } catch (err) {
+      console.error("Remove failed:", err.response?.data || err.message);
+      toast.error("Failed to remove from wishlist");
     }
   };
 
-  const moveToCart = async (item, cartContext) => {
-    await removeFromWishlist(item.id);
-    await cartContext.addToCart(item);
+  // Move to cart
+  const moveToCart = async (item) => {
+    if (!user || !access) {
+      toast.error("Please log in to move item to cart");
+      return;
+    }
+
+    try {
+      await API.post(
+        "/wishlist/move-to-cart/",
+        { product_id: item.id },
+        { headers: { Authorization: `Bearer ${access}` } }
+      );
+
+      addToCart(item); // add to cart context immediately
+      setWishlist((prev) => prev.filter((w) => w.id !== item.id));
+      toast.success("Moved to cart 🎉");
+    } catch (err) {
+      console.error("Move to cart failed:", err.response?.data || err.message);
+      toast.error("Failed to move item to cart");
+    }
   };
 
   return (

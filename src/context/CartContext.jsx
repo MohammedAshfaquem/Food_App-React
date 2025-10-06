@@ -2,77 +2,178 @@ import { createContext, useContext, useEffect, useState } from "react";
 import API from "../services/api";
 import { useAuth } from "./AuthContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, access } = useAuth(); // ✅ use access token
   const [cart, setCart] = useState([]);
+  const navigate = useNavigate();
 
+  // Fetch cart from backend
   useEffect(() => {
     const fetchCart = async () => {
-      if (user) {
-        const res = await API.get(`/users/${user.id}`);
-        setCart(res.data.cart || []);
-      } else {
+      if (!user || !access) {
+        setCart([]);
+        return;
+      }
+
+      try {
+        const res = await API.get("/cart/", {
+          headers: { Authorization: `Bearer ${access}` },
+        });
+
+        const items = res.data.data.items.map((i) => ({
+          id: i.id,
+          quantity: i.qty,
+          title: i.product.title,
+          price: parseFloat(i.product.price),
+          defaultImg: i.product.image || "/default-food.png",
+          productId: i.product.id,
+          inventory: typeof i.product.inventory === "number" ? i.product.inventory : undefined,
+        }));
+
+        setCart(items);
+      } catch (err) {
+        console.error("Failed to fetch cart:", err);
         setCart([]);
       }
     };
+
     fetchCart();
-  }, [user]);
+  }, [user, access]);
 
-  const updateCart = async (newCart) => {
-    if (!user) return;
-    setCart(newCart);
-    try {
-      await API.patch(`/users/${user.id}`, { cart: newCart });
-    } catch {
-      toast.error("Failed to update cart");
-    }
-  };
-
+  // Add item to cart
   const addToCart = async (item) => {
-    if (!user) {
+    if (!user || !access) {
       toast.error("Please log in to add to cart");
-      return navigate("/login");
+      return;
     }
+
     try {
-      const res = await API.get(`/users/${user.id}`);
-      const current = res.data.cart || [];
-      const exists = current.find((p) => p.id === item.id);
-      const updated = exists
-        ? current.map((p) =>
-            p.id === item.id ? { ...p, quantity: p.quantity + 1 } : p
-          )
-        : [...current, { ...item, quantity: 1 }];
+      await API.post(
+        "/cart/add/",
+        { product_id: item.productId || item.id, qty: 1 },
+        { headers: { Authorization: `Bearer ${access}` } }
+      );
 
-      await API.patch(`/users/${user.id}`, { cart: updated });
-      setCart(updated);
-      toast.success("Added to cart 🎉");
-    } catch {
-      toast.error("Cart update failed");
+      // fetch updated cart
+      const cartRes = await API.get("/cart/", {
+        headers: { Authorization: `Bearer ${access}` },
+      });
+
+      const updatedItems = cartRes.data.data.items.map((i) => ({
+        id: i.id,
+        quantity: i.qty,
+        title: i.product.title,
+        price: parseFloat(i.product.price),
+        defaultImg: i.product.image || "/default-food.png",
+        productId: i.product.id,
+        inventory: typeof i.product.inventory === "number" ? i.product.inventory : undefined,
+      }));
+
+      setCart(updatedItems);
+      toast.success("Item added to cart");
+    } catch (err) {
+      console.error("Add to cart failed:", err.response || err.message);
+      toast.error("Failed to add to cart");
     }
   };
 
-  const incrementItem = (id) => {
-    const updated = cart.map((item) =>
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    );
-    updateCart(updated);
+  // Increment item quantity
+  const incrementItem = async (cartItemId) => {
+    const item = cart.find((i) => i.id === cartItemId);
+    if (!item) return;
+
+    // Optimistic guard: prevent going beyond inventory if known
+    if (typeof item.inventory === "number" && item.quantity >= item.inventory) {
+      toast.info(`Only ${item.inventory} items available`);
+      return;
+    }
+
+    try {
+      const res = await API.post(
+        `/cart/item/${cartItemId}/update/`,
+        { qty: item.quantity + 1 },
+        { headers: { Authorization: `Bearer ${access}` } }
+      );
+
+      if (res.data.success) {
+        setCart((prev) =>
+          prev.map((i) =>
+            i.id === cartItemId ? { ...i, quantity: res.data.data.qty } : i
+          )
+        );
+      } else {
+        toast.info(res.data.message || "Quantity update failed");
+      }
+    } catch (err) {
+      const message = err?.response?.data?.message || err?.response?.data?.detail || "Failed to increment item";
+      toast.error(message);
+    }
   };
 
-  const decrementItem = (id) => {
-    const updated = cart.map((item) =>
-      item.id === id
-        ? { ...item, quantity: Math.max(1, item.quantity - 1) }
-        : item
-    );
-    updateCart(updated);
+  // Decrement item quantity
+  const decrementItem = async (cartItemId) => {
+    const item = cart.find((i) => i.id === cartItemId);
+    if (!item) return;
+
+    try {
+      const res = await API.post(
+        `/cart/item/${cartItemId}/update/`,
+        { qty: item.quantity - 1 },
+        { headers: { Authorization: `Bearer ${access}` } }
+      );
+
+      if (res.data.success) {
+        if (res.data.message === "Item removed from cart") {
+          setCart((prev) => prev.filter((i) => i.id !== cartItemId));
+          toast.success("Item removed from cart");
+        } else {
+          setCart((prev) =>
+            prev.map((i) =>
+              i.id === cartItemId ? { ...i, quantity: res.data.data.qty } : i
+            )
+          );
+        }
+      } else {
+        toast.info(res.data.message || "Quantity update failed");
+      }
+    } catch (err) {
+      console.error("Decrement failed:", err);
+      toast.error("Failed to decrement item");
+    }
   };
 
-  const removeFromCart = (id) => {
-    const updated = cart.filter((item) => item.id !== id);
-    updateCart(updated);
+  // Remove single item from cart
+  const removeFromCart = async (id) => {
+    try {
+      await API.delete(`/cart/item/${id}/delete/`, {
+        headers: { Authorization: `Bearer ${access}` },
+      });
+
+      setCart((prev) => prev.filter((i) => i.id !== id));
+      toast.success("Removed from cart");
+    } catch (err) {
+      console.error("Remove failed:", err);
+      toast.error("Failed to remove item");
+    }
+  };
+
+  // Clear cart completely
+  const clearCart = async () => {
+    try {
+      await API.post(
+        "/cart/clear/",
+        {},
+        { headers: { Authorization: `Bearer ${access}` } }
+      );
+    } catch (err) {
+      console.error("Failed to clear cart in backend:", err);
+    }
+
+    setCart([]); // clear local state
   };
 
   return (
@@ -80,10 +181,10 @@ export const CartProvider = ({ children }) => {
       value={{
         cart,
         addToCart,
-        updateCart,
         incrementItem,
         decrementItem,
         removeFromCart,
+        clearCart,
       }}
     >
       {children}

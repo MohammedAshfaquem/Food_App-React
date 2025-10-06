@@ -5,7 +5,7 @@ const RoleRedirect = () => {
   const { user } = useAuth();
 
   if (!user) return <Navigate to="/login" />;
-  if (user.role === "admin") return <Navigate to="/admin/dashboard" />;
+  if (user.is_superuser || user.is_staff) return <Navigate to="/admin/dashboard" />;
   return <Navigate to="/user-dashboard" />;
 };
 

@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useAuth } from "../../context/AuthContext";
 import Inputfield from "../../Components/InputField";
 
 const Register = () => {
-  const { register } = useAuth();
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
+    username: Yup.string().required("Username is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     password: Yup.string()
       .min(4, "Password must be at least 4 characters")
@@ -18,21 +18,18 @@ const Register = () => {
   });
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
+    initialValues: { username: "", email: "", password: "" },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
+      setSubmitting(true); // make sure isSubmitting is true at start
       try {
-        await register(values);
-        toast.success("Registered successfully 🎉");
+        const user = await register(values); // calls AuthContext.register
+        toast.success(`Registered successfully 🎉 as ${user.username}`);
         navigate("/login");
       } catch (err) {
-        toast.error(err.message || "Something went wrong");
+        toast.error(err.message);
       } finally {
-        setSubmitting(false);
+        setSubmitting(false); // always reset isSubmitting
       }
     },
   });
@@ -48,18 +45,18 @@ const Register = () => {
           onSubmit={formik.handleSubmit}
           className="w-full max-w-md p-8 bg-white shadow rounded"
         >
-          <h2 className="text-3xl font-bold text-center mb-2">Hello Again!</h2>
+          <h2 className="text-3xl font-bold text-center mb-2">Create Account</h2>
           <p className="text-center text-gray-500 mb-6 text-lg">
-            Welcome back you’ve been missed!
+            Join us and explore amazing food!
           </p>
 
           <Inputfield
-            placeholder="Enter your name"
-            name="name"
-            value={formik.values.name}
+            placeholder="Enter your username"
+            name="username"
+            value={formik.values.username}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.touched.name && formik.errors.name}
+            error={formik.touched.username && formik.errors.username}
           />
 
           <Inputfield

@@ -1,92 +1,51 @@
-import { useAuth } from "../context/AuthContext";
+import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
-import API from "../services/api";
+import { useAuth } from "../context/AuthContext";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { handleRazorpayPayment } from "../features/payment/razorpay";
 
 const CheckoutFooter = () => {
-  const { user } = useAuth();
-  const { cart, updateCart } = useCart();
-  const navigate = useNavigate();
-  const [showAddressInput, setShowAddressInput] = useState(false);
+  const { cart, clearCart } = useCart();
+  const { access, user } = useAuth();
+
   const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [phone, setPhone] = useState(user?.phone || "");
 
-  const handlePlaceOrderClick = () => {
-    if (!user) {
-      toast.error("Please log in first.");
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0); // ₹
+
+  const handlePayment = async () => {
+    if (!address || !city || !state || !pincode) {
+      toast.error("Please fill all required address fields");
       return;
     }
 
-    if (!cart || cart.length === 0) {
-      toast.warn("Your cart is empty.");
+    if (!access) {
+      toast.error("Please login first");
       return;
     }
 
-    setShowAddressInput(true);
-  };
-
-  const handleConfirmOrder = async () => {
-    if (!address.trim()) {
-      toast.warn("Please enter your address.");
-      return;
-    }
-
-    try {
-      const res = await API.get(`/users/${user.id}`);
-      const existingOrders = res.data.orders || [];
-
-      const timestamp = new Date().toISOString();
-
-      const ordersWithDetails = cart.map((item) => ({
-        ...item,
-        orderedAt: timestamp,
-        address,
-        status: "Pending",
-      }));
-
-      const updatedOrders = [...existingOrders, ...ordersWithDetails];
-
-      await API.patch(`/users/${user.id}`, {
-        orders: updatedOrders,
-        cart: [],
-      });
-
-      updateCart([]);
-      toast.success("Order placed successfully! 🎉");
-      navigate("/orders");
-    } catch (err) {
-      toast.error("Something went wrong while placing the order.");
-      console.error(err);
-    }
+    await handleRazorpayPayment({
+      totalAmount: total,
+      token: access,
+      cart,
+      userInfo: { name: user?.username || "", email: user?.email || "", phone, address, city, state, pincode },
+      clearCart,
+    });
   };
 
   return (
-    <div className="text-center w-full sm:w-auto mt-6 sm:mt-0">
-      {!showAddressInput ? (
-        <button
-          onClick={handlePlaceOrderClick}
-          className="w-full sm:w-auto bg-black text-white font-semibold py-3 px-6 rounded-lg hover:bg-white hover:text-black border border-black transition duration-300 ease-in-out"
-        >
-          Place Order
-        </button>
-      ) : (
-        <div className="flex flex-col gap-4">
-          <textarea
-            rows={3}
-            placeholder="Enter your delivery address..."
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="border border-gray-400 rounded-lg px-4 py-2 w-full resize-none"
-          />
-          <button
-            onClick={handleConfirmOrder}
-            className="w-full sm:w-auto bg-green-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-green-700 transition"
-          >
-            Confirm Order
-          </button>
-        </div>
-      )}
+    <div className="flex flex-col gap-3">
+      <input placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} className="p-2 rounded border" />
+      <input placeholder="City" value={city} onChange={(e) => setCity(e.target.value)} className="p-2 rounded border" />
+      <input placeholder="State" value={state} onChange={(e) => setState(e.target.value)} className="p-2 rounded border" />
+      <input placeholder="Pincode" value={pincode} onChange={(e) => setPincode(e.target.value)} className="p-2 rounded border" />
+      <input placeholder="Phone (optional)" value={phone} onChange={(e) => setPhone(e.target.value)} className="p-2 rounded border" />
+      <button onClick={handlePayment} className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+        Place & Pay ₹{total.toFixed(2)}
+      </button>
     </div>
   );
 };

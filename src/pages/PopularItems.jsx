@@ -5,12 +5,26 @@ import API from "../services/api";
 
 const PopularItems = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    API.get("/products")
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Error fetching products:", err));
+    API.get("/products/") // fetch all products
+      .then((res) => {
+        console.log("Products fetched:", res.data);
+
+        // Sort products by rating (descending)
+        const sortedProducts = res.data.sort(
+          (a, b) => parseFloat(b.rating) - parseFloat(a.rating)
+        );
+
+        // Take only top 4
+        setProducts(sortedProducts.slice(0, 4));
+      })
+      .catch((err) => {
+        console.error("Error fetching products:", err);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -23,15 +37,39 @@ const PopularItems = () => {
           Popular Food Items
         </h2>
 
+        {/* Loading state */}
+        {loading && (
+          <p className="text-gray-500 text-center">Loading products...</p>
+        )}
+
+        {/* No products case */}
+        {!loading && products.length === 0 && (
+          <p className="text-gray-500 text-center">No products available</p>
+        )}
+
+        {/* Products grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {products.slice(0, 4).map((item) => (
-            <FoodCard key={item.id} item={item} />
+          {products.map((item) => (
+            <FoodCard
+              key={item.id}
+              item={{
+                ...item,
+                image: item.image.startsWith("http")
+                  ? item.image
+                  : `http://127.0.0.1:8000${item.image}`, // fix relative image path
+              }}
+            />
           ))}
         </div>
 
+        {/* View More Button */}
         <div className="flex justify-center mt-10">
           <button
-            onClick={() => navigate("/all-foods")}
+            type="button"
+            onClick={() => {
+              console.log("View More clicked");
+              navigate("/all-foods");
+            }}
             className="bg-violet-600 hover:bg-violet-700 text-white font-semibold px-6 py-3 rounded-lg transition"
           >
             View More

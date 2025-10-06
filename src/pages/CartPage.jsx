@@ -2,18 +2,15 @@ import Navbar from "../Components/Navbar";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useCart } from "../context/CartContext";
 import CheckoutFooter from "../Components/CheckOut";
-import Swal from "sweetalert2"; // ✅ Import SweetAlert2
+import Swal from "sweetalert2";
 import Empty from "../Components/Empty";
 
 const CartPage = () => {
   const { cart, incrementItem, decrementItem, removeFromCart } = useCart();
 
-  const total = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // 🔶 Confirm delete with SweetAlert2
+  // Confirm deletion of item
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -39,6 +36,7 @@ const CartPage = () => {
           <Empty message="Your Cart is empty." />
         ) : (
           <>
+            {/* Cart items */}
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {cart.map((item) => (
                 <div
@@ -51,10 +49,8 @@ const CartPage = () => {
                       alt={item.title}
                       className="h-24 mx-auto object-contain"
                     />
-                    <h3 className="font-bold mt-2 text-base">{item.title}</h3>
-                    <p className="text-sm text-gray-600">
-                      Price: ₹{item.price}
-                    </p>
+                    <h3>{item.title}</h3>
+                    <p>Price: ₹{item.price}</p>
                   </div>
                   <div>
                     <div className="flex items-center justify-center gap-3 my-2">
@@ -67,13 +63,21 @@ const CartPage = () => {
                       <span className="text-lg">{item.quantity}</span>
                       <button
                         onClick={() => incrementItem(item.id)}
-                        className="p-2 bg-gray-200 rounded hover:bg-gray-300"
+                        disabled={typeof item.inventory === "number" && item.quantity >= item.inventory}
+                        className={`p-2 rounded ${
+                          typeof item.inventory === "number" && item.quantity >= item.inventory
+                            ? "bg-gray-300 cursor-not-allowed"
+                            : "bg-gray-200 hover:bg-gray-300"
+                        }`}
                       >
                         <FaPlus />
                       </button>
+                      {typeof item.inventory === "number" && item.quantity >= item.inventory && (
+                        <div className="text-xs text-red-600 mt-1">Out of stock</div>
+                      )}
                     </div>
                     <button
-                      onClick={() => handleDelete(item.id)} // ✅ SweetAlert confirm delete
+                      onClick={() => handleDelete(item.id)}
                       className="text-red-500 hover:text-red-700 mt-2"
                     >
                       <FaTrash />
@@ -83,7 +87,7 @@ const CartPage = () => {
               ))}
             </div>
 
-            {/* 🔵 Checkout Section */}
+            {/* Checkout Section */}
             <div className="w-full lg:w-1/4 bg-purple-600 text-white p-6 rounded shadow h-[600px]">
               <h2 className="text-xl font-bold mb-4">Checkout</h2>
               {cart.map((item) => (

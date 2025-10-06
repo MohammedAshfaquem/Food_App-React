@@ -30,7 +30,7 @@
       "email": "fatima@example.com",
       "password": "fatima123",
       "role": "user",
-      "isBlock": false,
+      "isBlock": true,
       "cart": [
         {
           "id": "1",
@@ -167,7 +167,7 @@
           "quantity": 4,
           "orderedAt": "2025-07-11T08:50:00.000Z",
           "address": "Gulmarg Residency, Pune",
-          "status": "Pending"
+          "status": "Processing"
         }
       ]
     },
@@ -340,7 +340,19 @@
       "password": "test123",
       "role": "user",
       "isBlock": false,
-      "cart": [],
+      "cart": [
+        {
+          "id": "3",
+          "title": "Noodles",
+          "count": "5 PRODUCTS",
+          "price": 99,
+          "rating": 3.8,
+          "inStock": false,
+          "defaultImg": "/Noodles.png",
+          "description": "Spicy stir-fried noodles with veggies and soy sauce.",
+          "quantity": 1
+        }
+      ],
       "orders": [
         {
           "id": "f8a9",
@@ -452,6 +464,48 @@
           "orderedAt": "2025-08-11T04:03:36.045Z",
           "address": "New",
           "status": "Pending"
+        },
+        {
+          "id": "1",
+          "title": "Burger",
+          "count": "5 PRODUCTS",
+          "price": 200,
+          "rating": 4.3,
+          "inStock": true,
+          "defaultImg": "/Burger.png",
+          "description": "Juicy grilled burger with melted cheese and lettuce.",
+          "quantity": 3,
+          "orderedAt": "2025-09-29T10:03:54.281Z",
+          "address": "address",
+          "status": "Pending"
+        },
+        {
+          "id": "6",
+          "title": "Broast",
+          "count": "5 PRODUCTS",
+          "price": 179,
+          "rating": 4.4,
+          "inStock": false,
+          "defaultImg": "/broast.png",
+          "description": "Crispy fried broast chicken with flavorful coating.",
+          "quantity": 1,
+          "orderedAt": "2025-09-29T10:05:38.308Z",
+          "address": "hello",
+          "status": "Pending"
+        },
+        {
+          "id": "8",
+          "title": "Grilled Chicken",
+          "count": "5 PRODUCTS",
+          "price": 219,
+          "rating": 4.7,
+          "inStock": true,
+          "defaultImg": "/grilledchicken.png",
+          "description": "Tender grilled chicken breast with smoky flavor.",
+          "quantity": 1,
+          "orderedAt": "2025-09-29T10:05:38.308Z",
+          "address": "hello",
+          "status": "Pending"
         }
       ],
       "wishlist": []
@@ -462,7 +516,7 @@
       "id": "1",
       "title": "Burger",
       "count": "5 PRODUCTS",
-      "price": 200,
+      "price": 20,
       "rating": 4.3,
       "inStock": true,
       "defaultImg": "/Burger.png",
