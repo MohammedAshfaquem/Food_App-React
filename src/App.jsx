@@ -84,7 +84,7 @@ function App() {
           <Route path="users/:id" element={<UserDetailsPage />} />
           <Route path="food-orders" element={<FoodOrders />} />
           <Route path="favorites" element={<Favorites />} />
-          <Route path="order-history" element={<ProductManagement />} />
+          <Route path="product-managment" element={<ProductManagement />} />
         </Route>
 
         {/* ❓ Optional: 404 Page */}

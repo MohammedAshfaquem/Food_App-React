@@ -12,6 +12,12 @@ import ProductCard from "../../Components/ProductCard";
 const MySwal = withReactContent(Swal);
 const ITEMS_PER_PAGE = 8;
 
+// Helper function to resolve image URLs
+const getImageUrl = (img) => {
+  if (!img) return "/default-food.png"; // fallback if no image
+  return img; // Already a full URL from API
+};
+
 const ProductDashboard = () => {
   const [products, setProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -19,11 +25,19 @@ const ProductDashboard = () => {
   const [viewProduct, setViewProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // ---------------- FETCH PRODUCTS ----------------
   const fetchProducts = async () => {
     try {
-      const res = await API.get("/products");
-      setProducts(res.data);
-    } catch (error) {
+      const res = await API.get("/products/"); // trailing slash
+      const data = res.data?.data || res.data; // handle api_response wrapper
+      // Add proper image URLs
+      const productsWithImages = data.map((p) => ({
+        ...p,
+        image: getImageUrl(p.image),
+      }));
+      setProducts(productsWithImages);
+    } catch (err) {
+      console.error(err);
       toast.error("Failed to load products.");
     }
   };
@@ -32,18 +46,27 @@ const ProductDashboard = () => {
     fetchProducts();
   }, []);
 
+  // ---------------- ADD PRODUCT ----------------
   const handleAddProduct = async (values, { resetForm }) => {
     try {
-      await API.post("/products", values);
+      const formData = new FormData();
+      Object.keys(values).forEach((key) => formData.append(key, values[key]));
+
+      await API.post("/products/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
       toast.success("Product added!");
       resetForm();
       setShowAddForm(false);
       fetchProducts();
-    } catch {
-      toast.error("Add failed");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to add product.");
     }
   };
 
+  // ---------------- DELETE PRODUCT ----------------
   const handleDelete = async (id) => {
     const result = await MySwal.fire({
       title: "Are you sure?",
@@ -57,34 +80,32 @@ const ProductDashboard = () => {
 
     if (result.isConfirmed) {
       try {
-        await API.delete(`/products/${id}`);
+        await API.delete(`/products/${id}/`);
         toast.success("Product deleted");
         fetchProducts();
-      } catch {
+      } catch (err) {
+        console.error(err);
         toast.error("Delete failed");
       }
-    } else {
-      MySwal.fire("Cancelled", "Product not deleted", "info");
     }
   };
 
-  const handleUpdateProduct = async (updatedProduct) => {
+  // ---------------- UPDATE PRODUCT ----------------
+  const handleUpdateProduct = async (formData, productId) => {
     try {
-      if (!updatedProduct.id) {
-        toast.error("Update failed: Product ID missing.");
-        return;
-      }
+      await API.patch(`/products/${productId}/`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      await API.put(`/products/${updatedProduct.id}`, updatedProduct);
-      toast.success("Product updated");
-      setEditingProduct(null);
       fetchProducts();
-    } catch {
+      setEditingProduct(null);
+    } catch (err) {
+      console.error(err.response?.data || err);
       toast.error("Update failed");
     }
   };
 
-  // Pagination logic
+  // ---------------- PAGINATION ----------------
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const paginatedProducts = products.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
@@ -100,6 +121,7 @@ const ProductDashboard = () => {
 
   return (
     <div className="p-4 sm:p-6">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h3 className="text-2xl font-bold">All Products List</h3>
         <button
@@ -110,9 +132,20 @@ const ProductDashboard = () => {
         </button>
       </div>
 
-      {showAddForm && <ProductForm onSubmit={handleAddProduct} />}
+      {/* Add Product Form */}
+      {showAddForm && (
+        <ProductForm
+          onSubmit={async (formData) => {
+            await API.post("/products/", formData, {
+              headers: { "Content-Type": "multipart/form-data" },
+            });
+            toast.success("Product added!");
+            fetchProducts();
+          }}
+        />
+      )}
 
-      {/* Mobile cards view */}
+      {/* Mobile Cards View */}
       <div className="block sm:hidden space-y-4">
         {paginatedProducts.map((product) => (
           <ProductCard
@@ -125,13 +158,13 @@ const ProductDashboard = () => {
         ))}
       </div>
 
-      {/* Desktop table view */}
+      {/* Desktop Table View */}
       <div className="overflow-x-auto border rounded hidden sm:block">
-        <table className="min-w-[700px] w-full text-sm sm:text-base text-left">
+        <table className="min-w-[700px] w-full text-left">
           <thead className="bg-gray-100 text-gray-700 font-semibold">
             <tr className="h-14">
-              <th className="py-3 px-3">Products</th>
-              <th className="py-3 px-3">Starting Price</th>
+              <th className="py-3 px-3">Product</th>
+              <th className="py-3 px-3">Price</th>
               <th className="py-3 px-3">ID</th>
               <th className="py-3 px-3">Stock</th>
               <th className="py-3 px-3">Action</th>
@@ -186,14 +219,17 @@ const ProductDashboard = () => {
 
       {/* Modals */}
       {viewProduct && (
-        <ProductViewModal product={viewProduct} onClose={() => setViewProduct(null)} />
+        <ProductViewModal
+          product={viewProduct}
+          onClose={() => setViewProduct(null)}
+        />
       )}
 
       {editingProduct && (
         <EditModal
           product={editingProduct}
           onClose={() => setEditingProduct(null)}
-          onSubmit={handleUpdateProduct}
+          onSubmit={handleUpdateProduct} // passes formData & id
         />
       )}
     </div>

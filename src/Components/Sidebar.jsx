@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, onClose }) => {
     {
       name: "Product Management",
       icon: <FaHistory />,
-      path: "/admin/order-history",
+      path: "/admin/product-managment",
     },
   ];
 

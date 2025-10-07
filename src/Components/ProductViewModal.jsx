@@ -2,11 +2,18 @@ const ProductViewModal = ({ product, onClose }) => (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50">
     <div className="bg-white p-6 rounded shadow w-full max-w-md">
       <h3 className="text-xl font-bold mb-4">Product Details</h3>
+
+      {/* Corrected image property */}
       <img
-        src={product.defaultImg}
+        src={product.image}
         alt={product.title}
         className="w-48 h-48 object-cover rounded mb-4 mx-auto"
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = "/default-food.png"; // fallback image
+        }}
       />
+
       <p className="mb-2">
         <strong>Title:</strong> {product.title}
       </p>
@@ -20,9 +27,9 @@ const ProductViewModal = ({ product, onClose }) => (
         <strong>Rating:</strong> {product.rating}
       </p>
       <p className="mb-4">
-        <strong>Status:</strong>{" "}
-        {product.inStock ? "Available" : "Out of Stock"}
+        <strong>Status:</strong> {product.in_stock ? "Available" : "Out of Stock"}
       </p>
+
       <div className="flex justify-end">
         <button
           onClick={onClose}

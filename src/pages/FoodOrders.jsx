@@ -1,65 +1,49 @@
-import { useEffect, useState } from "react";
+// src/pages/admin/FoodOrders.jsx
+import React, { useEffect, useState } from "react";
 import API from "../services/api";
 import { toast } from "react-toastify";
 import StatusStepper from "../Components/Status";
 
 const FoodOrders = () => {
-  const [groupedOrders, setGroupedOrders] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [filter, setFilter] = useState("All");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchAllOrders = async () => {
+    const fetchOrders = async () => {
       try {
-        const res = await API.get("/users");
-        const tempMap = new Map();
+        setLoading(true);
+        const res = await API.get("/admin/orders/");
+        const data = res.data.success ? res.data.data : [];
 
-        res.data.forEach((user) => {
-          user.orders?.forEach((order, index) => {
-            const groupKey = `${user.id}-${order.orderedAt}`;
-            if (!tempMap.has(groupKey)) {
-              tempMap.set(groupKey, {
-                userId: user.id,
-                userName: user.name,
-                address: order.address,
-                orderedAt: order.orderedAt,
-                status: order.status,
-                items: [],
-                orderIndexes: [],
-              });
-            }
-            tempMap.get(groupKey).items.push(order);
-            tempMap.get(groupKey).orderIndexes.push(index);
-          });
-        });
+        // Map image correctly from product
+        const mappedOrders = data.map((order) => ({
+          ...order,
+          items: order.items.map((item) => ({
+            ...item,
+            image: item.product?.image || "/default-food.png",
+            title: item.product?.title || "N/A",
+          })),
+        }));
 
-        setGroupedOrders(Array.from(tempMap.values()));
+        setOrders(mappedOrders);
       } catch (err) {
         console.error("Error fetching orders:", err);
+        toast.error("Failed to fetch orders");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchAllOrders();
+    fetchOrders();
   }, []);
 
-  const handleStatusChange = async (userId, orderIndexes, newStatus) => {
+  const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const userRes = await API.get(`/users/${userId}`);
-      const user = userRes.data;
-      const updatedOrders = [...user.orders];
-
-      orderIndexes.forEach((i) => (updatedOrders[i].status = newStatus));
-
-      await API.patch(`/users/${userId}`, { orders: updatedOrders });
-
-      setGroupedOrders((prev) =>
-        prev.map((group) =>
-          group.userId === userId &&
-          JSON.stringify(group.orderIndexes) === JSON.stringify(orderIndexes)
-            ? { ...group, status: newStatus }
-            : group
-        )
+      await API.patch(`/admin/orders/${orderId}/status/`, { status: newStatus });
+      setOrders((prev) =>
+        prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
       );
-
       toast.success(`Order status updated to "${newStatus}"`);
     } catch (err) {
       console.error("Status update failed:", err);
@@ -67,31 +51,37 @@ const FoodOrders = () => {
     }
   };
 
-  const filteredGroups =
-    filter === "All"
-      ? groupedOrders
-      : groupedOrders.filter((g) => g.status === filter);
+  const filteredOrders =
+    filter === "All" ? orders : orders.filter((o) => o.status === filter);
 
   const getStatusClass = (status) => {
     switch (status) {
-      case "Pending":
-        return "bg-purple-100 text-purple-700 border border-purple-300";
-      case "Processing":
-        return "bg-blue-100 text-blue-700 border border-blue-300";
-      case "Delivered":
-        return "bg-green-100 text-green-700 border border-green-300";
+      case "PENDING":
+        return "bg-yellow-100 text-yellow-800";
+      case "PROCESSING":
+        return "bg-blue-100 text-blue-800";
+      case "DELIVERED":
+        return "bg-green-100 text-green-800";
       default:
-        return "bg-gray-100 text-gray-700 border";
+        return "bg-gray-100 text-gray-800";
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <p className="text-gray-600 text-lg">Loading orders...</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
+    <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Food Orders</h2>
 
-      {/* 🔵 Filter Buttons */}
-      <div className="flex gap-2 mb-6">
-        {["All", "Pending", "Processing", "Delivered"].map((status) => (
+      {/* Filter Buttons */}
+      <div className="flex gap-2 mb-6 flex-wrap">
+        {["All", "PENDING", "PROCESSING", "DELIVERED"].map((status) => (
           <button
             key={status}
             onClick={() => setFilter(status)}
@@ -106,67 +96,53 @@ const FoodOrders = () => {
         ))}
       </div>
 
-      {/* 🟣 Order Cards */}
-      {filteredGroups.length === 0 ? (
-        <p>No orders found.</p>
+      {/* Orders List */}
+      {filteredOrders.length === 0 ? (
+        <p className="text-gray-500">No orders found.</p>
       ) : (
-        filteredGroups.map((group, i) => (
+        filteredOrders.map((order) => (
           <div
-            key={i}
+            key={order.id}
             className="bg-white rounded-xl shadow-md hover:shadow-lg transition p-6 mb-6"
           >
-            {/* 🔘 Header */}
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h4 className="font-bold text-lg">{group.userName}</h4>
+                <h4 className="font-bold text-lg">{order.name}</h4>
                 <p className="text-sm text-gray-500">
-                  Address: {group.address} | Ordered at:{" "}
-                  {new Date(group.orderedAt).toLocaleString()}
+                  Address: {order.address}, {order.city} | Ordered at:{" "}
+                  {new Date(order.created_at).toLocaleString()}
                 </p>
               </div>
 
               <select
-                value={group.status}
-                onChange={(e) =>
-                  handleStatusChange(
-                    group.userId,
-                    group.orderIndexes,
-                    e.target.value
-                  )
-                }
+                value={order.status}
+                onChange={(e) => handleStatusChange(order.id, e.target.value)}
                 className={`px-3 py-1 rounded text-sm transition ${getStatusClass(
-                  group.status
+                  order.status
                 )}`}
               >
-                <option value="Pending">Pending</option>
-                <option value="Processing">Processing</option>
-                <option value="Delivered">Delivered</option>
+                <option value="PENDING">Pending</option>
+                <option value="PROCESSING">Processing</option>
+                <option value="DELIVERED">Delivered</option>
               </select>
             </div>
 
-            {/* 🟢 Step Progress UI */}
-            <StatusStepper currentStatus={group.status} />
+            <StatusStepper currentStatus={order.status} />
 
-            {/* 🧾 Order Details */}
             <div className="border rounded-lg p-4">
-              <h5 className="font-semibold mb-3">Order Menu</h5>
+              <h5 className="font-semibold mb-3">Order Items</h5>
               <div className="space-y-4">
-                {group.items.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between"
-                  >
+                {order.items.map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <img
-                        src={item.defaultImg}
-                        alt={item.title}
+                        src={item.image} // Correct image from product
+                        alt={item.title || "Item"}
                         className="w-30 h-30 rounded border border-purple-400 p-1"
                       />
                       <div>
                         <p className="font-medium">{item.title}</p>
-                        <p className="text-sm text-gray-500">
-                          x{item.quantity}
-                        </p>
+                        <p className="text-sm text-gray-500">x{item.qty}</p>
                       </div>
                     </div>
                     <span className="text-purple-500 font-semibold">
@@ -179,8 +155,7 @@ const FoodOrders = () => {
               <div className="flex justify-between text-sm font-semibold">
                 <span>Total</span>
                 <span>
-                  ₹
-                  {group.items.reduce(
+                  ₹{order.items.reduce(
                     (acc, item) => acc + Number(item.price),
                     0
                   )}

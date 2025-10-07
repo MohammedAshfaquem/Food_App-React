@@ -1,4 +1,3 @@
-// src/pages/admin/UserPage.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
@@ -15,14 +14,18 @@ const UserPage = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await API.get("/users");
-        const filtered = res.data.filter((u) => u.role === "user");
-        setUsers(filtered);
-      } catch {
+        const res = await API.get("/admin/users/"); 
+        if (res.data.success) {
+          const filtered = res.data.data.filter((u) => !u.is_staff); // only non-staff
+          setUsers(filtered);
+        } else {
+          toast.error("No users found");
+        }
+      } catch (err) {
+        console.error("Failed to load users:", err.response || err);
         toast.error("Failed to load users");
       }
     };
-
     fetchUsers();
   }, []);
 
@@ -55,8 +58,7 @@ const UserPage = () => {
 
   return (
     <>
-      <h2 className="text-2xl font-bold ml-6 mt-6 ">Users </h2>
-
+      <h2 className="text-2xl font-bold ml-6 mt-6">All Users</h2>
       <div className="p-6 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {users.map((user) => (
           <div
@@ -65,7 +67,7 @@ const UserPage = () => {
           >
             <div className="flex justify-between items-center mb-2">
               <div>
-                <h3 className="font-bold text-lg">{user.name}</h3>
+                <h3 className="font-bold text-lg">{user.username}</h3>
                 <p className="text-sm">Email: {user.email}</p>
                 <p className="text-xs text-gray-400">
                   {user.isBlock ? "Blocked" : "Active"}
@@ -85,7 +87,7 @@ const UserPage = () => {
 
             <div className="text-sm space-y-1">
               <p>
-                🛒 Cart: {user.cart?.length || 0} | ❤️ Wishlist:{" "}
+                🛒 Cart: {user.cart?.items?.length || 0} | ❤️ Wishlist:{" "}
                 {user.wishlist?.length || 0}
               </p>
               <p>📦 Orders: {user.orders?.length || 0}</p>
