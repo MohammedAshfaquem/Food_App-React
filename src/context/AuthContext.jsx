@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import API from "../services/api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -24,42 +25,69 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    const res = await API.post("/auth/login/", {
-      username: email,
-      password,
-    });
+    try {
+      const res = await API.post("/auth/login/", {
+        username: email,
+        password,
+      });
 
-    const userData = {
-      id: res.data.id,
-      username: res.data.username,
-      email: email,
-      role: res.data.role || "user",
-      is_staff: !!res.data.is_staff,
-      is_superuser: !!res.data.is_superuser,
-    };
+      if (!res.data.is_active) {
+        alert("Please verify your email before logging in.");
+        return null;
+      }
 
-    setUser(userData);
-    setAccess(res.data.access);
-    setRefresh(res.data.refresh);
+      const userData = {
+        id: res.data.id,
+        username: res.data.username,
+        email: email,
+        role: res.data.role || "user",
+        is_staff: !!res.data.is_staff,
+        is_superuser: !!res.data.is_superuser,
+      };
 
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("access", res.data.access);
-    localStorage.setItem("refresh", res.data.refresh);
+      setUser(userData);
+      setAccess(res.data.access);
+      setRefresh(res.data.refresh);
 
-    return userData;
+      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem("access", res.data.access);
+      localStorage.setItem("refresh", res.data.refresh);
+
+      return userData;
+    } catch (err) {
+      console.error("Login failed:", err);
+      throw err;
+    }
   };
 
   const register = async (newUser) => {
     try {
       const res = await API.post("/auth/register/", newUser);
-
-      alert(
-        "Registration successful! Please check your email to verify your account."
-      );
+      if (res.data.success) {
+        toast.success(`Verification email sent to ${res.data.email}`);
+      }
       return res.data;
     } catch (err) {
-      console.error(err);
-      throw err; 
+      const email = err.response?.data?.email || newUser.email;
+      console.error("Registration error:", err.response?.data);
+      toast.error(
+        `Registration failed for ${email}. Reason: ${JSON.stringify(
+          err.response?.data?.errors || "Unknown error"
+        )}`
+      );
+      throw err;
+    }
+  };
+
+  const verifyEmail = async (uid, token) => {
+    try {
+      const res = await API.get(`/auth/verify-email/${uid}/${token}/`);
+      toast.success("✅ Email verified successfully! You can now log in.");
+      return res.data;
+    } catch (err) {
+      console.error("Email verification failed:", err);
+      toast.error("❌ Invalid or expired verification link.");
+      throw err;
     }
   };
 
@@ -87,6 +115,7 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
+        verifyEmail,
       }}
     >
       {children}

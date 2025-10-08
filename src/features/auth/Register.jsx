@@ -24,7 +24,6 @@ const Register = () => {
       setSubmitting(true); 
       try {
         const user = await register(values); 
-        toast.success(`Registered successfully 🎉 as ${user.username}`);
         navigate("/login");
       } catch (err) {
         toast.error(err.message);

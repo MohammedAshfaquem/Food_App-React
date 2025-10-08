@@ -1,30 +1,22 @@
-// src/pages/VerifyEmail.jsx
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const VerifyEmail = () => {
+const VerifyEmailPage = () => {
   const { uid, token } = useParams();
   const { verifyEmail } = useAuth();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const verify = async () => {
-      try {
-        await verifyEmail(uid, token);
-        navigate("/login");
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    verify();
-  }, [uid, token, verifyEmail, navigate]);
+    if (uid && token) {
+      verifyEmail(uid, token);
+    }
+  }, [uid, token]);
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <h2 className="text-lg font-bold">Verifying your email...</h2>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h1 className="text-2xl font-semibold">Verifying your email...</h1>
     </div>
   );
 };
 
-export default VerifyEmail;
+export default VerifyEmailPage;

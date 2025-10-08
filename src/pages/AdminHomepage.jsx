@@ -1,4 +1,3 @@
-// src/pages/admin/AdminHome.jsx
 import React, { useEffect, useState } from "react";
 import API from "../services/api";
 import {
@@ -41,7 +40,6 @@ const AdminHome = () => {
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [availableYears, setAvailableYears] = useState([]);
 
-  // Fetch initial stats (current week + initial total revenue)
   useEffect(() => {
     const fetchAdminStats = async () => {
       try {
@@ -78,7 +76,6 @@ const AdminHome = () => {
     fetchAdminStats();
   }, []);
 
-  // Update total revenue when year changes (weekly chart stays current week)
   const handleYearChange = async (year) => {
     setSelectedYear(year);
     try {
@@ -88,8 +85,7 @@ const AdminHome = () => {
         const data = res.data.data;
         setStats((prev) => ({
           ...prev,
-          total_revenue: data.total_revenue, // update revenue summary only
-          // weekly_revenue remains current week
+          total_revenue: data.total_revenue, 
         }));
       }
     } catch (err) {
@@ -114,7 +110,6 @@ const AdminHome = () => {
     <div className="p-6">
       <h3 className="text-3xl font-bold mb-6 text-start">Admin Dashboard</h3>
 
-      {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
         <SummaryCard
           icon={<FaUserFriends />}
@@ -181,9 +176,7 @@ const AdminHome = () => {
         />
       </div>
 
-      {/* Charts */}
       <div className="flex flex-col md:flex-row gap-6 mb-10">
-        {/* Order Status Pie Chart */}
         <div className="bg-white shadow rounded p-6 w-full md:w-1/2">
           <h3 className="text-lg font-bold mb-4 text-center">
             Order Status Distribution
@@ -241,7 +234,6 @@ const AdminHome = () => {
           </div>
         </div>
 
-        {/* Weekly Revenue Bar Chart */}
         <div className="bg-white shadow rounded p-6 w-full md:w-full">
           <h3 className="text-lg font-bold mb-4 text-center">
             Current Week Revenue

@@ -20,6 +20,7 @@ import UserLayout from "./layouts/UserLayout.jsx";
 import RoleRedirect from "./routes/RoleRedirect.jsx";
 import ForgotPassword from "./Components/ForgotPassword.jsx";
 import ResetPassword from "./Components/ResetPassword.jsx";
+import VerifyEmailPage from "./pages/VerifyEmail.jsx";
 
 function App() {
   return (
@@ -28,6 +29,8 @@ function App() {
         <Route path="/" element={<RoleRedirect />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email/:uid/:token" element={<VerifyEmailPage />} />
+
         
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/user-dashboard" element={<UserLayout />} />

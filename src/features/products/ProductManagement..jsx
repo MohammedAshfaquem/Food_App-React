@@ -12,10 +12,9 @@ import ProductCard from "../../Components/ProductCard";
 const MySwal = withReactContent(Swal);
 const ITEMS_PER_PAGE = 8;
 
-// Helper function to resolve image URLs
 const getImageUrl = (img) => {
-  if (!img) return "/default-food.png"; // fallback if no image
-  return img; // Already a full URL from API
+  if (!img) return "/default-food.png"; 
+  return img;
 };
 
 const ProductDashboard = () => {
@@ -25,12 +24,10 @@ const ProductDashboard = () => {
   const [viewProduct, setViewProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  // ---------------- FETCH PRODUCTS ----------------
   const fetchProducts = async () => {
     try {
-      const res = await API.get("/products/"); // trailing slash
-      const data = res.data?.data || res.data; // handle api_response wrapper
-      // Add proper image URLs
+      const res = await API.get("/products/"); 
+      const data = res.data?.data || res.data; 
       const productsWithImages = data.map((p) => ({
         ...p,
         image: getImageUrl(p.image),
@@ -46,7 +43,6 @@ const ProductDashboard = () => {
     fetchProducts();
   }, []);
 
-  // ---------------- ADD PRODUCT ----------------
   const handleAddProduct = async (values, { resetForm }) => {
     try {
       const formData = new FormData();
@@ -66,7 +62,6 @@ const ProductDashboard = () => {
     }
   };
 
-  // ---------------- DELETE PRODUCT ----------------
   const handleDelete = async (id) => {
     const result = await MySwal.fire({
       title: "Are you sure?",
@@ -90,7 +85,6 @@ const ProductDashboard = () => {
     }
   };
 
-  // ---------------- UPDATE PRODUCT ----------------
   const handleUpdateProduct = async (formData, productId) => {
     try {
       await API.patch(`/products/${productId}/`, formData, {
@@ -105,7 +99,6 @@ const ProductDashboard = () => {
     }
   };
 
-  // ---------------- PAGINATION ----------------
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const paginatedProducts = products.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,

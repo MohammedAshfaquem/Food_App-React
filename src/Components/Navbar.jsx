@@ -79,9 +79,9 @@ const Navbar = () => {
                 {user ? (
                   <>
                     <div className="px-4 py-2 border-b font-semibold text-purple-700">
-                      {user.username} {/* <-- updated */}
+                      {user.username}  
                       <br />
-                      <span className="text-sm text-gray-700">
+                      <span className="text-sm text-gray-700 block w-full truncate" title={user.email}>
                         {user.email}
                       </span>
                     </div>
