@@ -1,16 +1,16 @@
 const ProductViewModal = ({ product, onClose }) => (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50">
+  <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center px-4 z-50">
+
     <div className="bg-white p-6 rounded shadow w-full max-w-md">
       <h3 className="text-xl font-bold mb-4">Product Details</h3>
 
-      {/* Corrected image property */}
       <img
         src={product.image}
         alt={product.title}
         className="w-48 h-48 object-cover rounded mb-4 mx-auto"
         onError={(e) => {
           e.target.onerror = null;
-          e.target.src = "/default-food.png"; // fallback image
+          e.target.src = "/default-food.png"; 
         }}
       />
 

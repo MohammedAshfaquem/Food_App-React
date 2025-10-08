@@ -121,7 +121,6 @@ const ProductDashboard = () => {
 
   return (
     <div className="p-4 sm:p-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h3 className="text-2xl font-bold">All Products List</h3>
         <button
@@ -132,7 +131,6 @@ const ProductDashboard = () => {
         </button>
       </div>
 
-      {/* Add Product Form */}
       {showAddForm && (
         <ProductForm
           onSubmit={async (formData) => {
@@ -145,7 +143,6 @@ const ProductDashboard = () => {
         />
       )}
 
-      {/* Mobile Cards View */}
       <div className="block sm:hidden space-y-4">
         {paginatedProducts.map((product) => (
           <ProductCard
@@ -158,7 +155,6 @@ const ProductDashboard = () => {
         ))}
       </div>
 
-      {/* Desktop Table View */}
       <div className="overflow-x-auto border rounded hidden sm:block">
         <table className="min-w-[700px] w-full text-left">
           <thead className="bg-gray-100 text-gray-700 font-semibold">
@@ -184,7 +180,6 @@ const ProductDashboard = () => {
         </table>
       </div>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center mt-6 gap-2 flex-wrap">
           <button
@@ -217,7 +212,6 @@ const ProductDashboard = () => {
         </div>
       )}
 
-      {/* Modals */}
       {viewProduct && (
         <ProductViewModal
           product={viewProduct}
@@ -229,7 +223,7 @@ const ProductDashboard = () => {
         <EditModal
           product={editingProduct}
           onClose={() => setEditingProduct(null)}
-          onSubmit={handleUpdateProduct} // passes formData & id
+          onSubmit={handleUpdateProduct} 
         />
       )}
     </div>

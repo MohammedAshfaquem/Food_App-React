@@ -21,15 +21,15 @@ const Register = () => {
     initialValues: { username: "", email: "", password: "" },
     validationSchema,
     onSubmit: async (values, { setSubmitting }) => {
-      setSubmitting(true); // make sure isSubmitting is true at start
+      setSubmitting(true); 
       try {
-        const user = await register(values); // calls AuthContext.register
+        const user = await register(values); 
         toast.success(`Registered successfully 🎉 as ${user.username}`);
         navigate("/login");
       } catch (err) {
         toast.error(err.message);
       } finally {
-        setSubmitting(false); // always reset isSubmitting
+        setSubmitting(false); 
       }
     },
   });

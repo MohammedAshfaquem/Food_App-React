@@ -25,10 +25,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     const res = await API.post("/auth/login/", {
-      username: email, // <-- SimpleJWT expects "username"
+      username: email,
       password,
     });
-    // login endpoint
+
     const userData = {
       id: res.data.id,
       username: res.data.username,
@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
       is_staff: !!res.data.is_staff,
       is_superuser: !!res.data.is_superuser,
     };
+
     setUser(userData);
     setAccess(res.data.access);
     setRefresh(res.data.refresh);
@@ -49,16 +50,17 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (newUser) => {
-    const res = await API.post("/auth/register/", newUser); // fixed endpoint
-    const userData = {
-      id: res.data.data.id,
-      username: res.data.data.username,
-      email: res.data.data.email,
-      role: res.data.data.role || "user",
-    };
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-    return userData;
+    try {
+      const res = await API.post("/auth/register/", newUser);
+
+      alert(
+        "Registration successful! Please check your email to verify your account."
+      );
+      return res.data;
+    } catch (err) {
+      console.error(err);
+      throw err; 
+    }
   };
 
   const logout = () => {

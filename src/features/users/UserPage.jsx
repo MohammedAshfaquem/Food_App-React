@@ -9,14 +9,15 @@ const MySwal = withReactContent(Swal);
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
+  const [blockingUserId, setBlockingUserId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await API.get("/admin/users/"); 
+        const res = await API.get("/admin/users/");
         if (res.data.success) {
-          const filtered = res.data.data.filter((u) => !u.is_staff); // only non-staff
+          const filtered = res.data.data.filter((u) => !u.is_staff);
           setUsers(filtered);
         } else {
           toast.error("No users found");
@@ -31,8 +32,14 @@ const UserPage = () => {
 
   const toggleBlock = async (id, isBlock) => {
     const action = isBlock ? "unblock" : "block";
+
     const result = await MySwal.fire({
       title: `Are you sure you want to ${action} this user?`,
+      input: !isBlock ? "textarea" : null, // Only ask reason when blocking
+      inputPlaceholder: "Enter reason for blocking the user",
+      inputAttributes: {
+        "aria-label": "Enter reason",
+      },
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#8b5cf6",
@@ -45,14 +52,25 @@ const UserPage = () => {
       return;
     }
 
+    // If blocking, ensure reason is provided
+    if (!isBlock && !result.value) {
+      toast.error("Blocking reason is required");
+      return;
+    }
+
+    const reason = result.value || ""; // Use empty string for unblock
+
     try {
-      await API.patch(`/users/${id}`, { isBlock: !isBlock });
+      setBlockingUserId(id);
+      await API.patch(`/users/${id}/block-toggle/`, { reason }); // Send reason to backend
       toast.success(`User ${!isBlock ? "blocked" : "unblocked"}`);
       setUsers((prev) =>
         prev.map((u) => (u.id === id ? { ...u, isBlock: !isBlock } : u))
       );
     } catch {
       toast.error("Failed to toggle user block");
+    } finally {
+      setBlockingUserId(null);
     }
   };
 
@@ -75,11 +93,20 @@ const UserPage = () => {
               </div>
               <button
                 onClick={() => toggleBlock(user.id, user.isBlock)}
+                disabled={blockingUserId === user.id}
                 className={`px-3 py-1 rounded text-white text-sm ${
                   user.isBlock ? "bg-green-600" : "bg-red-500"
+                } ${
+                  blockingUserId === user.id
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 }`}
               >
-                {user.isBlock ? "Unblock" : "Block"}
+                {blockingUserId === user.id
+                  ? "Processing..."
+                  : user.isBlock
+                  ? "Unblock"
+                  : "Block"}
               </button>
             </div>
 
@@ -91,6 +118,23 @@ const UserPage = () => {
                 {user.wishlist?.length || 0}
               </p>
               <p>📦 Orders: {user.orders?.length || 0}</p>
+
+              {/* {user.orders?.length > 0 && (
+                <div className="mt-2 max-h-32 overflow-y-auto border rounded p-2 bg-gray-50">
+                  {user.orders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="flex justify-between items-center text-xs border-b py-1 last:border-b-0"
+                    >
+                      <span>Order #{order.id}</span>
+                      <span className={`px-2 py-0.5 rounded text-white ${order.status === "DELIVERED" ? "bg-green-500" : order.status === "PROCESSING" ? "bg-yellow-500" : "bg-gray-500"}`}>
+                        {order.status}
+                      </span>
+                      <span>₹{order.total_amount}</span>
+                    </div>
+                  ))}
+                </div>
+              )} */}
             </div>
 
             <button

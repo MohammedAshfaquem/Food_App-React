@@ -4,14 +4,18 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../../context/AuthContext";
 import Inputfield from "../../Components/InputField";
+import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [loadingReset, setLoadingReset] = useState(false);
 
   const validationSchema = Yup.object({
     email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().min(4, "Min 4 characters").required("Password is required"),
+    password: Yup.string()
+      .min(4, "Min 4 characters")
+      .required("Password is required"),
   });
 
   const formik = useFormik({
@@ -20,23 +24,28 @@ const Login = () => {
     onSubmit: async (values, { setSubmitting }) => {
       setSubmitting(true);
       try {
-        // Send username instead of email, because SimpleJWT expects 'username'
         const user = await login(values.email, values.password);
 
         toast.success(`Welcome back, ${user.username} 🎉`);
 
-        // Redirect based on superuser/staff
         if (user.is_superuser || user.is_staff) {
           navigate("/admin/dashboard");
         } else {
           navigate("/user-dashboard");
         }
       } catch (err) {
-        // Handle API errors
-        if (err.response && err.response.data) {
-          toast.error(err.response.data.message || "Invalid credentials");
+        const message =
+          err?.response?.data?.detail ||
+          err?.response?.data?.message ||
+          err?.message ||
+          "Something went wrong";
+
+        if (message.includes("blocked")) {
+          toast.error(
+            "⚠️ Your account has been blocked. Please contact admin."
+          );
         } else {
-          toast.error(err.message || "Something went wrong");
+          toast.error(message);
         }
       } finally {
         setSubmitting(false);
@@ -44,11 +53,13 @@ const Login = () => {
     },
   });
 
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
-      {/* Left Panel */}
       <div className="hidden md:flex w-1/2 bg-[#f4f7ff] flex-col justify-center items-center p-10">
-        <h1 className="text-3xl font-bold mb-2 text-center">Sign In to Recharge Direct</h1>
+        <h1 className="text-3xl font-bold mb-2 text-center">
+          Sign In to Recharge Direct
+        </h1>
         <p className="text-gray-600 mb-4 text-center">
           Don’t have an account?{" "}
           <span
@@ -58,10 +69,13 @@ const Login = () => {
             Register here!
           </span>
         </p>
-        <img src="/Intro.png" alt="Login visual" className="max-w-[300px] mt-4" />
+        <img
+          src="/Intro.png"
+          alt="Login visual"
+          className="max-w-[300px] mt-4"
+        />
       </div>
 
-      {/* Right Panel */}
       <div className="w-full md:w-1/2 flex items-center justify-center bg-white px-6 py-10">
         <form
           onSubmit={formik.handleSubmit}
@@ -85,6 +99,15 @@ const Login = () => {
             onBlur={formik.handleBlur}
             error={formik.touched.password && formik.errors.password}
           />
+
+          <div className="text-right mt-2">
+            <span
+              className="text-blue-600 cursor-pointer underline text-sm"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Forgot Password?
+            </span>
+          </div>
 
           <button
             type="submit"

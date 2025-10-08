@@ -4,7 +4,8 @@ const API = axios.create({
   baseURL: "http://127.0.0.1:8000/api",
 });
 
-// Attach token
+
+
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("access");
   if (token) {
@@ -13,7 +14,6 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle token expiry
 API.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -45,10 +45,9 @@ API.interceptors.response.use(
         API.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
         originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
 
-        return API(originalRequest); // retry with new token
+        return API(originalRequest);
       } catch (err) {
         console.error("Token refresh failed:", err);
-        // optional: auto logout user
         localStorage.removeItem("access");
         localStorage.removeItem("refresh");
         window.location.href = "/login";

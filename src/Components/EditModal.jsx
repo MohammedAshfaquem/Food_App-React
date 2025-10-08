@@ -58,7 +58,6 @@ const EditModal = ({ product, onClose, onSubmit }) => {
         formData.append("image", newImageFile);
       }
 
-      // ✅ Call parent onSubmit (ProductDashboard)
       await onSubmit(formData, formValues.id);
 
       toast.success("✅ Product updated successfully!");
@@ -72,7 +71,7 @@ const EditModal = ({ product, onClose, onSubmit }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center px-4 z-50">
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center px-4 z-50">
       <form
         onSubmit={handleSubmit}
         encType="multipart/form-data"
@@ -80,7 +79,6 @@ const EditModal = ({ product, onClose, onSubmit }) => {
       >
         <h3 className="text-lg font-bold mb-3">Edit Product</h3>
 
-        {/* Image Preview */}
         <div className="mb-3 text-center">
           <img
             src={preview}
@@ -102,7 +100,6 @@ const EditModal = ({ product, onClose, onSubmit }) => {
           </label>
         </div>
 
-        {/* Other Fields */}
         {["title", "price", "rating", "description"].map((field) => (
           <input
             key={field}

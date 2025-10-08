@@ -38,14 +38,35 @@ const AdminHome = () => {
     status_data: [],
   });
   const [loading, setLoading] = useState(true);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [availableYears, setAvailableYears] = useState([]);
 
+  // Fetch initial stats (current week + initial total revenue)
   useEffect(() => {
     const fetchAdminStats = async () => {
       try {
         setLoading(true);
+
+        // 1. Fetch current week + overall stats
         const response = await API.get("/admin/stats/");
         if (response.data.success) {
-          setStats(response.data.data);
+          const initialStats = response.data.data;
+
+          // Past 5 years dropdown
+          const currentYear = new Date().getFullYear();
+          const years = Array.from({ length: 5 }, (_, i) => currentYear - i);
+          setAvailableYears(years);
+
+          // 2. Fetch yearly total revenue for selectedYear (2025)
+          const resYear = await API.get(`/admin/stats/?year=${selectedYear}`);
+          const yearlyRevenue = resYear.data.success
+            ? resYear.data.data.total_revenue
+            : initialStats.total_revenue;
+
+          setStats({
+            ...initialStats,
+            total_revenue: yearlyRevenue, // show 2025 revenue by default
+          });
         }
       } catch (error) {
         console.error("Failed to fetch admin stats:", error);
@@ -56,6 +77,27 @@ const AdminHome = () => {
 
     fetchAdminStats();
   }, []);
+
+  // Update total revenue when year changes (weekly chart stays current week)
+  const handleYearChange = async (year) => {
+    setSelectedYear(year);
+    try {
+      setLoading(true);
+      const res = await API.get(`/admin/stats/?year=${year}`);
+      if (res.data.success) {
+        const data = res.data.data;
+        setStats((prev) => ({
+          ...prev,
+          total_revenue: data.total_revenue, // update revenue summary only
+          // weekly_revenue remains current week
+        }));
+      }
+    } catch (err) {
+      console.error("Failed to fetch yearly revenue:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -71,6 +113,7 @@ const AdminHome = () => {
   return (
     <div className="p-6">
       <h3 className="text-3xl font-bold mb-6 text-start">Admin Dashboard</h3>
+
       {/* Summary Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
         <SummaryCard
@@ -92,7 +135,6 @@ const AdminHome = () => {
           label="Total Orders"
           value={stats.total_orders}
           color="green"
-          extra="+4% (30 days)"
           cardBgClass="bg-green-200"
         />
         <SummaryCard
@@ -123,12 +165,25 @@ const AdminHome = () => {
           isCurrency
           color="pink"
           cardBgClass="bg-pink-200"
+          extra={
+            <select
+              className="ml-2 p-1 border rounded text-sm"
+              value={selectedYear}
+              onChange={(e) => handleYearChange(Number(e.target.value))}
+            >
+              {availableYears.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+          }
         />
       </div>
 
-      {/* Charts Section */}
+      {/* Charts */}
       <div className="flex flex-col md:flex-row gap-6 mb-10">
-        {/* Pie Chart */}
+        {/* Order Status Pie Chart */}
         <div className="bg-white shadow rounded p-6 w-full md:w-1/2">
           <h3 className="text-lg font-bold mb-4 text-center">
             Order Status Distribution
@@ -186,11 +241,19 @@ const AdminHome = () => {
           </div>
         </div>
 
-        {/* Bar Chart */}
+        {/* Weekly Revenue Bar Chart */}
         <div className="bg-white shadow rounded p-6 w-full md:w-full">
-          <h3 className="text-lg font-bold mb-4 text-center">Weekly Revenue</h3>
+          <h3 className="text-lg font-bold mb-4 text-center">
+            Current Week Revenue
+          </h3>
           <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={stats.weekly_revenue} barCategoryGap={20}>
+            <BarChart
+              data={stats.weekly_revenue.map((item) => ({
+                ...item,
+                revenue: Number(item.revenue),
+              }))}
+              barCategoryGap={20}
+            >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="day" />
               <YAxis />
@@ -209,11 +272,18 @@ const AdminHome = () => {
   );
 };
 
-// Reusable Summary Card Component
-const SummaryCard = ({ icon, label, value, color, cardBgClass, extra, isCurrency }) => (
+const SummaryCard = ({
+  icon,
+  label,
+  value,
+  color,
+  cardBgClass,
+  extra,
+  isCurrency,
+}) => (
   <div
     className={`shadow rounded p-4 flex items-center gap-4 ${cardBgClass} 
-      transform transition-transform duration-300 hover:scale-103 hover:shadow-xl`}
+      transform transition-transform duration-300 hover:scale-105 hover:shadow-xl`}
   >
     <div className="bg-white p-3 rounded-full">
       {React.cloneElement(icon, { className: `text-${color}-600 text-xl` })}
@@ -222,13 +292,13 @@ const SummaryCard = ({ icon, label, value, color, cardBgClass, extra, isCurrency
       <p className="text-sm text-black">{label}</p>
       <p className="text-2xl font-bold text-black">
         <CountUp
-          end={typeof value === "number" ? value : parseInt(value.replace(/[^\d]/g, ""))}
+          end={Number(value) || 0}
           prefix={isCurrency ? "₹" : ""}
           duration={3.2}
           separator=","
         />
       </p>
-      {extra && <p className="text-xs text-grey mt-1">{extra}</p>}
+      {extra && <div className="mt-1">{extra}</div>}
     </div>
   </div>
 );

@@ -2,16 +2,12 @@ import { ToastContainer } from "react-toastify";
 import "./App.css";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-
-// Public/User pages
 import Login from "./features/auth/Login.jsx";
 import Register from "./features/auth/Register.jsx";
 import AllFoods from "./pages/AllFoods";
 import CartPage from "./pages/CartPage";
 import WishlistPage from "./pages/WishlistPage";
 import OrdersPage from "./pages/Orders";
-
-// Admin pages and layout
 import AdminLayout from "./layouts/AdminLayout.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import FoodOrders from "./pages/FoodOrders.jsx";
@@ -22,21 +18,21 @@ import UserPage from "./features/users/UserPage.jsx";
 import PrivateRoute from "./routes/PrivateRoute.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 import RoleRedirect from "./routes/RoleRedirect.jsx";
+import ForgotPassword from "./Components/ForgotPassword.jsx";
+import ResetPassword from "./Components/ResetPassword.jsx";
 
 function App() {
   return (
     <>
       <Routes>
-        
-        {/* 🔁 Redirect root to correct dashboard based on role */}
         <Route path="/" element={<RoleRedirect />} />
-
-        {/* 🌐 Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/user-dashboard" element={<UserLayout />} />
+        <Route path="/reset-password/:uid/:token" element={<ResetPassword />} />
 
-        {/* 🔐 Private User Routes */}
         <Route
           path="/all-foods"
           element={
@@ -69,8 +65,6 @@ function App() {
             </PrivateRoute>
           }
         />
-
-        {/* 🧑‍💼 Admin Routes (Nested inside AdminLayout) */}
         <Route
           path="/admin"
           element={
@@ -86,17 +80,17 @@ function App() {
           <Route path="favorites" element={<Favorites />} />
           <Route path="product-managment" element={<ProductManagement />} />
         </Route>
-
-        {/* ❓ Optional: 404 Page */}
         <Route
           path="*"
           element={
-            <div className="p-10 text-center text-2xl">404 - Page Not Found</div>
+            <div className="p-10 text-center text-2xl">
+              404 - Page Not Found
+            </div>
           }
         />
       </Routes>
 
-      <ToastContainer position="top-right" autoClose={2000} newestOnTop />
+      <ToastContainer position="top-right" autoClose={2000} newestOnTop  />
     </>
   );
 }

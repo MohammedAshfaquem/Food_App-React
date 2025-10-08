@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import API from "../services/api";
 import { useAuth } from "../context/AuthContext";
 
-// Helper function to resolve image URLs
 const getImageUrl = (img) => {
-  if (!img) return "/default-food.png"; // fallback if no image
+  if (!img) return "/default-food.png"; 
   return img.startsWith("http") ? img : `http://127.0.0.1:8000${img}`;
 };
 
@@ -31,7 +30,7 @@ const TopFavorites = () => {
             id: item.id,
             title: item.title,
             image: getImageUrl(item.image),
-            count: item.favorites_count || 0, // add favorites count
+            count: item.favorites_count || 0, 
           }));
           setFavorites(products);
         } else {
@@ -79,18 +78,17 @@ const TopFavorites = () => {
   return (
     <div className="px-8 py-10 min-h-screen bg-[#f7f5f1]">
       <h2 className="text-2xl font-bold mb-6">Top Favorited Foods</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {favorites.map((food) => (
           <div
             key={food.id}
-            className="relative bg-purple-100 shadow rounded-[16px] overflow-hidden flex flex-col justify-center items-center p-3"
+            className="relative bg-purple-100 shadow rounded-[16px] overflow-hidden flex flex-col justify-center items-center p-4 h-70" 
+            // Increased height to h-80 (~20rem)
           >
-            {/* Favorites Count Badge */}
             <div className="absolute top-2 right-2 bg-purple-700 text-white text-sm font-bold w-8 h-8 flex items-center justify-center rounded-full shadow">
               {food.count}
             </div>
 
-            {/* Product Image */}
             <img
               src={food.image}
               alt={food.title}
@@ -101,8 +99,7 @@ const TopFavorites = () => {
               }}
             />
 
-            {/* Product Title */}
-            <h3 className="mt-2 text-center font-semibold">{food.title}</h3>
+            <h3 className="mt-4 text-center font-semibold">{food.title}</h3>
           </div>
         ))}
       </div>

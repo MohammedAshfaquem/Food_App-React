@@ -6,18 +6,16 @@ import { toast } from "react-toastify";
 
 const WishlistContext = createContext();
 
-// Helper to normalize image URLs
 const getImageUrl = (img) => {
   if (!img) return "/default-food.png";
   return img.startsWith("http") ? img : `http://127.0.0.1:8000${img}`;
 };
 
 export const WishlistProvider = ({ children }) => {
-  const { user, access } = useAuth(); // ✅ use access token
+  const { user, access } = useAuth(); 
   const { addToCart } = useCart();
   const [wishlist, setWishlist] = useState([]);
 
-  // Fetch wishlist
   useEffect(() => {
     const fetchWishlist = async () => {
       if (!user || !access) {
@@ -45,7 +43,6 @@ export const WishlistProvider = ({ children }) => {
     fetchWishlist();
   }, [user, access]);
 
-  // Add to wishlist
   const addToWishlist = async (product) => {
     if (!user || !access) {
       toast.error("Please log in to add items to wishlist");
@@ -72,7 +69,6 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // Remove from wishlist
   const removeFromWishlist = async (product_id) => {
     if (!user || !access) return;
 
@@ -88,7 +84,6 @@ export const WishlistProvider = ({ children }) => {
     }
   };
 
-  // Move to cart
   const moveToCart = async (item) => {
     if (!user || !access) {
       toast.error("Please log in to move item to cart");
@@ -102,9 +97,8 @@ export const WishlistProvider = ({ children }) => {
         { headers: { Authorization: `Bearer ${access}` } }
       );
 
-      addToCart(item); // add to cart context immediately
+      addToCart(item);
       setWishlist((prev) => prev.filter((w) => w.id !== item.id));
-      toast.success("Moved to cart 🎉");
     } catch (err) {
       console.error("Move to cart failed:", err.response?.data || err.message);
       toast.error("Failed to move item to cart");

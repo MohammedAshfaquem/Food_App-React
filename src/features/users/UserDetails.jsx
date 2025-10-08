@@ -35,7 +35,6 @@ const UserDetailsPage = () => {
       <p className="text-md mb-4">🔐 Status: {user.is_active ? "Active" : "Blocked"}</p>
       <hr className="my-4" />
 
-      {/* Cart Items */}
       <h3 className="font-semibold text-xl mb-2">🛒 Cart Items</h3>
       {user.cart?.items?.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -58,7 +57,6 @@ const UserDetailsPage = () => {
         <p className="text-gray-500 mb-4">No cart items</p>
       )}
 
-      {/* Wishlist */}
       <h3 className="font-semibold text-xl mt-8 mb-2">❤️ Wishlist</h3>
       {user.wishlist?.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -77,7 +75,6 @@ const UserDetailsPage = () => {
         <p className="text-gray-500 mb-4">No wishlist items</p>
       )}
 
-      {/* Orders */}
       <h3 className="font-semibold text-xl mt-8 mb-2">📦 Orders</h3>
       {user.orders?.length ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

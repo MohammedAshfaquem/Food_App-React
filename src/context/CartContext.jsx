@@ -7,11 +7,10 @@ import { useNavigate } from "react-router-dom";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const { user, access } = useAuth(); // ✅ use access token
+  const { user, access } = useAuth(); 
   const [cart, setCart] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch cart from backend
   useEffect(() => {
     const fetchCart = async () => {
       if (!user || !access) {
@@ -44,7 +43,6 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, [user, access]);
 
-  // Add item to cart
   const addToCart = async (item) => {
     if (!user || !access) {
       toast.error("Please log in to add to cart");
@@ -58,7 +56,6 @@ export const CartProvider = ({ children }) => {
         { headers: { Authorization: `Bearer ${access}` } }
       );
 
-      // fetch updated cart
       const cartRes = await API.get("/cart/", {
         headers: { Authorization: `Bearer ${access}` },
       });
@@ -81,12 +78,10 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Increment item quantity
   const incrementItem = async (cartItemId) => {
     const item = cart.find((i) => i.id === cartItemId);
     if (!item) return;
 
-    // Optimistic guard: prevent going beyond inventory if known
     if (typeof item.inventory === "number" && item.quantity >= item.inventory) {
       toast.info(`Only ${item.inventory} items available`);
       return;
@@ -114,7 +109,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Decrement item quantity
   const decrementItem = async (cartItemId) => {
     const item = cart.find((i) => i.id === cartItemId);
     if (!item) return;
@@ -146,7 +140,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Remove single item from cart
   const removeFromCart = async (id) => {
     try {
       await API.delete(`/cart/item/${id}/delete/`, {
@@ -161,7 +154,6 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  // Clear cart completely
   const clearCart = async () => {
     try {
       await API.post(
@@ -173,7 +165,7 @@ export const CartProvider = ({ children }) => {
       console.error("Failed to clear cart in backend:", err);
     }
 
-    setCart([]); // clear local state
+    setCart([]);
   };
 
   return (

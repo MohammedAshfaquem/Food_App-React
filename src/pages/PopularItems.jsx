@@ -9,16 +9,13 @@ const PopularItems = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    API.get("/products/") // fetch all products
+    API.get("/products/") 
       .then((res) => {
         console.log("Products fetched:", res.data);
 
-        // Sort products by rating (descending)
         const sortedProducts = res.data.sort(
           (a, b) => parseFloat(b.rating) - parseFloat(a.rating)
         );
-
-        // Take only top 4
         setProducts(sortedProducts.slice(0, 4));
       })
       .catch((err) => {
@@ -37,17 +34,14 @@ const PopularItems = () => {
           Popular Food Items
         </h2>
 
-        {/* Loading state */}
         {loading && (
           <p className="text-gray-500 text-center">Loading products...</p>
         )}
 
-        {/* No products case */}
         {!loading && products.length === 0 && (
           <p className="text-gray-500 text-center">No products available</p>
         )}
 
-        {/* Products grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {products.map((item) => (
             <FoodCard
@@ -56,13 +50,12 @@ const PopularItems = () => {
                 ...item,
                 image: item.image.startsWith("http")
                   ? item.image
-                  : `http://127.0.0.1:8000${item.image}`, // fix relative image path
+                  : `http://127.0.0.1:8000${item.image}`,
               }}
             />
           ))}
         </div>
 
-        {/* View More Button */}
         <div className="flex justify-center mt-10">
           <button
             type="button"

@@ -1,4 +1,3 @@
-// src/pages/admin/FoodOrders.jsx
 import React, { useEffect, useState } from "react";
 import API from "../services/api";
 import { toast } from "react-toastify";
@@ -16,7 +15,6 @@ const FoodOrders = () => {
         const res = await API.get("/admin/orders/");
         const data = res.data.success ? res.data.data : [];
 
-        // Map image correctly from product
         const mappedOrders = data.map((order) => ({
           ...order,
           items: order.items.map((item) => ({
@@ -79,7 +77,6 @@ const FoodOrders = () => {
     <div className="p-6">
       <h2 className="text-2xl font-bold mb-4">Food Orders</h2>
 
-      {/* Filter Buttons */}
       <div className="flex gap-2 mb-6 flex-wrap">
         {["All", "PENDING", "PROCESSING", "DELIVERED"].map((status) => (
           <button
@@ -96,7 +93,6 @@ const FoodOrders = () => {
         ))}
       </div>
 
-      {/* Orders List */}
       {filteredOrders.length === 0 ? (
         <p className="text-gray-500">No orders found.</p>
       ) : (
@@ -136,7 +132,7 @@ const FoodOrders = () => {
                   <div key={idx} className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <img
-                        src={item.image} // Correct image from product
+                        src={item.image} 
                         alt={item.title || "Item"}
                         className="w-30 h-30 rounded border border-purple-400 p-1"
                       />

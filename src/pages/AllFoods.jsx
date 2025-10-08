@@ -18,23 +18,20 @@ const AllFoods = () => {
   }, []);
 
   const getFilteredFoods = () => {
-    // Always hide out-of-stock items
     let result = foods.filter((f) => f.in_stock !== false && (typeof f.inventory !== "number" || f.inventory > 0));
 
-    // Search filter
     if (search.trim()) {
       result = result.filter((item) =>
         item.title.toLowerCase().includes(search.toLowerCase())
       );
     }
 
-    // Sorting / filtering
     if (filter === "price") {
       result = result.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
     } else if (filter === "rating") {
       result = result.sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
     } else if (filter === "stock") {
-      result = result.filter((item) => item.in_stock); // explicit stock filter retained for UI button
+      result = result.filter((item) => item.in_stock);
     }
 
     return result;
@@ -48,7 +45,6 @@ const AllFoods = () => {
 
   const filteredFoods = getFilteredFoods();
 
-  // Pagination logic
   const totalPages = Math.ceil(filteredFoods.length / ITEMS_PER_PAGE);
   const paginatedFoods = filteredFoods.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,

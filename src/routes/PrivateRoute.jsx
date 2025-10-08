@@ -11,16 +11,11 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   if (Array.isArray(allowedRoles) && allowedRoles.length > 0) {
     const isAdmin = user.is_superuser || user.is_staff;
 
-    // If route requires admin
     if (allowedRoles.includes("admin")) {
       if (!isAdmin) return <Navigate to="/" replace />;
     }
 
-    // If route requires regular user
     if (allowedRoles.includes("user")) {
-      // Allow any authenticated user. If you want to exclude admins from user-only
-      // routes, uncomment the next line:
-      // if (isAdmin) return <Navigate to="/admin/dashboard" replace />;
     }
   }
 

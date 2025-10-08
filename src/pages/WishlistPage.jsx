@@ -2,14 +2,13 @@ import { FaShoppingCart, FaTrash } from "react-icons/fa";
 import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import Empty from "../Components/Empty";
-import Swal from "sweetalert2"; // ✅ Import SweetAlert2
+import Swal from "sweetalert2";
 import Navbar from "../Components/Navbar";
 
 const WishlistPage = () => {
   const { moveToCart, wishlist, removeFromWishlist } = useWishlist();
   const cart = useCart();
 
-  // 🔶 Handle delete with SweetAlert
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -29,7 +28,6 @@ const WishlistPage = () => {
 
   return (
     <>
-      {/* Navbar */}
       <Navbar />
       <section className="p-6 sm:p-10 min-h-screen bg-[#f7f5f1]">
         <h1 className="text-3xl font-bold mb-6">My Wishlist</h1>
@@ -66,7 +64,7 @@ const WishlistPage = () => {
                     <FaShoppingCart /> Add to Cart
                   </button>
                   <button
-                    onClick={() => handleDelete(item.id)} // ✅ SweetAlert confirm delete
+                    onClick={() => handleDelete(item.id)} 
                     className="text-red-500 hover:text-red-500"
                   >
                     <FaTrash />

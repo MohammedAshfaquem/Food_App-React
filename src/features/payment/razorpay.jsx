@@ -2,15 +2,14 @@ import { toast } from "react-toastify";
 import API from "../../services/api";
 
 export const handleRazorpayPayment = async ({
-  totalAmount, // in ₹
+  totalAmount,
   token,
   cart,
-  userInfo, // { name, email, phone, address, city, state, pincode }
-  clearCart, // function to clear cart after success
+  userInfo,
+  clearCart,
 }) => {
   if (!token) return toast.error("Please login first");
 
-  // Load Razorpay SDK
   const loaded = await new Promise((resolve) => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -22,10 +21,9 @@ export const handleRazorpayPayment = async ({
   if (!loaded) return toast.error("Razorpay SDK failed to load");
 
   try {
-    // Create order on backend (amount in paise)
     const orderRes = await API.post(
       "/razorpay/create-order/",
-      { amount: Number(Number(totalAmount).toFixed(2)) }, // backend converts to paise
+      { amount: Number(Number(totalAmount).toFixed(2)) },
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
@@ -34,24 +32,23 @@ export const handleRazorpayPayment = async ({
       return toast.error(orderRes.data.message || "Failed to create order");
     }
 
-    const { order_id, amount, currency } = orderRes.data.data; // amount in paise
+    const { order_id, amount, currency } = orderRes.data.data;
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      amount, // in paise
+      amount, 
       currency,
       name: "My Food Store",
       description: "Order Payment",
       order_id,
       display_currency: "INR",
-      display_amount: (Number(amount) / 100).toFixed(2), // ensure correct display in ₹
+      display_amount: (Number(amount) / 100).toFixed(2), 
 
       handler: async (response) => {
         try {
           const items = cart.map((item) => ({
             product_id: Number(item.productId),
             qty: Number(item.quantity),
-            // send price in rupees with 2 decimals; backend will validate totals and convert as needed
             price: Number(Number(item.price).toFixed(2)),
           }));
 
@@ -61,7 +58,6 @@ export const handleRazorpayPayment = async ({
             razorpay_signature: response.razorpay_signature,
             ...userInfo,
             items,
-            // send rupees value; backend compares rupees and verifies Razorpay paise amount
             amount: Number(Number(totalAmount).toFixed(2)),
           };
 

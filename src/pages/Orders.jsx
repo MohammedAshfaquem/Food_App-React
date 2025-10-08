@@ -6,11 +6,11 @@ import { toast } from "react-toastify";
 import Empty from "../Components/Empty";
 
 const OrdersPage = () => {
-  const { access } = useAuth(); // use access token
+  const { access } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [ratingLoading, setRatingLoading] = useState({}); // Track individual item rating
 
-  // Fetch user orders
   const fetchOrders = async () => {
     if (!access) return;
 
@@ -20,7 +20,6 @@ const OrdersPage = () => {
         headers: { Authorization: `Bearer ${access}` },
       });
 
-      // Backend returns a plain array
       setOrders(res.data || []);
     } catch (err) {
       toast.error("Error fetching orders.");
@@ -34,21 +33,19 @@ const OrdersPage = () => {
     fetchOrders();
   }, [access]);
 
-  // Format date & time
   const formatDate = (iso) => new Date(iso).toLocaleDateString("en-IN");
   const formatTime = (iso) =>
     new Date(iso).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
 
-  // Status badge style
   const getStatusBadge = (status) => {
     const base = "text-xs font-semibold px-2 py-1 rounded-full";
     if (status.toLowerCase() === "paid") return `${base} bg-green-100 text-green-700`;
     if (status.toLowerCase() === "pending") return `${base} bg-yellow-100 text-yellow-700`;
     if (status.toLowerCase() === "processing") return `${base} bg-blue-100 text-blue-700`;
+    if (status.toLowerCase() === "delivered") return `${base} bg-purple-100 text-purple-700`;
     return `${base} bg-gray-100 text-gray-700`;
   };
 
-  // Normalize backend status (e.g., "PAID", "PENDING") to human-friendly label
   const formatStatus = (raw) => {
     if (!raw) return "";
     const s = String(raw).toUpperCase();
@@ -56,8 +53,39 @@ const OrdersPage = () => {
     if (s === "PENDING") return "Pending";
     if (s === "FAILED") return "Failed";
     if (s === "CANCELLED") return "Cancelled";
-    // Fallback: capitalize first letter, rest lowercase
+    if (s === "DELIVERED") return "Delivered";
     return String(raw).charAt(0).toUpperCase() + String(raw).slice(1).toLowerCase();
+  };
+
+  const submitRating = async (orderItemId, rating) => {
+    try {
+      setRatingLoading((prev) => ({ ...prev, [orderItemId]: true }));
+      const res = await API.post(
+        `/order-item/${orderItemId}/rate/`,
+        { rating },
+        { headers: { Authorization: `Bearer ${access}` } }
+      );
+
+      if (res.data.success) {
+        toast.success("Rating submitted!");
+        // Update orders locally to reflect the rating
+        setOrders((prev) =>
+          prev.map((order) => ({
+            ...order,
+            items: order.items.map((item) =>
+              item.id === orderItemId ? { ...item, rating } : item
+            ),
+          }))
+        );
+      } else {
+        toast.error(res.data.message || "Failed to submit rating");
+      }
+    } catch (err) {
+      console.error("Error submitting rating:", err);
+      toast.error("Error submitting rating");
+    } finally {
+      setRatingLoading((prev) => ({ ...prev, [orderItemId]: false }));
+    }
   };
 
   return (
@@ -82,7 +110,6 @@ const OrdersPage = () => {
           <div className="space-y-6">
             {orders.map((order) => (
               <div key={order.id} className="bg-white shadow rounded-xl p-6 border border-gray-200">
-                {/* Order Header */}
                 <div className="flex justify-between items-center mb-4">
                   <div>
                     <p className="text-sm text-gray-500">
@@ -94,13 +121,12 @@ const OrdersPage = () => {
                   </span>
                 </div>
 
-                {/* Order Items */}
                 <div className="border rounded-lg p-4">
                   <h5 className="font-semibold mb-3">Order Items</h5>
                   {order.items.length > 0 ? (
                     <div className="space-y-4">
                       {order.items.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between">
+                        <div key={item.id} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                           <div className="flex items-center gap-4">
                             <img
                               src={item.product.image}
@@ -114,9 +140,32 @@ const OrdersPage = () => {
                               <p className="text-sm text-gray-500">Subtotal: ₹{(Number(item.price) * Number(item.qty)).toFixed(2)}</p>
                             </div>
                           </div>
-                          <span className="text-purple-500 font-semibold">
-                            ₹{(Number(item.price) * Number(item.qty)).toFixed(2)}
-                          </span>
+                          <div className="flex flex-col items-end gap-2">
+                            <span className="text-purple-500 font-semibold">
+                              ₹{(Number(item.price) * Number(item.qty)).toFixed(2)}
+                            </span>
+
+                            {/* Show rating if order delivered and not yet rated */}
+                            {order.status === "DELIVERED" && item.rating == null && (
+                              <div className="flex items-center gap-1 mt-2">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                  <button
+                                    key={star}
+                                    disabled={ratingLoading[item.id]}
+                                    onClick={() => submitRating(item.id, star)}
+                                    className={`text-2xl ${ratingLoading[item.id] ? "text-gray-400" : "text-yellow-400 hover:text-yellow-500"}`}
+                                  >
+                                    ★
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+
+                            {/* Show submitted rating */}
+                            {item.rating != null && (
+                              <p className="text-sm text-gray-600 mt-2">Your Rating: {item.rating} ★</p>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -124,7 +173,6 @@ const OrdersPage = () => {
                     <p className="text-sm text-gray-500">No items in this order</p>
                   )}
 
-                  {/* Total Amount */}
                   <hr className="my-4" />
                   <div className="flex justify-between text-sm font-semibold">
                     <span>Total</span>

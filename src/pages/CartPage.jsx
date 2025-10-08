@@ -10,7 +10,6 @@ const CartPage = () => {
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // Confirm deletion of item
   const handleDelete = (id) => {
     Swal.fire({
       title: "Are you sure?",
@@ -36,7 +35,6 @@ const CartPage = () => {
           <Empty message="Your Cart is empty." />
         ) : (
           <>
-            {/* Cart items */}
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {cart.map((item) => (
                 <div
@@ -87,7 +85,6 @@ const CartPage = () => {
               ))}
             </div>
 
-            {/* Checkout Section */}
             <div className="w-full lg:w-1/4 bg-purple-600 text-white p-6 rounded shadow h-[600px]">
               <h2 className="text-xl font-bold mb-4">Checkout</h2>
               {cart.map((item) => (

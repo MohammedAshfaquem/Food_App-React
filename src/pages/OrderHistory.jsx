@@ -1,4 +1,3 @@
-// 🟡 OrderHistory.jsx
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
@@ -17,8 +16,7 @@ const OrderHistory = () => {
       });
       setOrders(res.data || []);
     } catch (e) {
-      // no-op display error here to keep UI simple
-      // console.error(e);
+
     } finally {
       setLoading(false);
     }
@@ -26,7 +24,6 @@ const OrderHistory = () => {
 
   useEffect(() => {
     fetchHistory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [access]);
 
   const formatDate = (iso) => new Date(iso).toLocaleDateString("en-IN");
